@@ -1,0 +1,447 @@
+{
+  "Bermuda": {
+    "country": "Bermuda",
+    "annual_income": 130290,
+    "monthly_income": 10857.5
+  },
+  "Norway": {
+    "country": "Norway",
+    "annual_income": 102910,
+    "monthly_income": 8575.8
+  },
+  "Switzerland": {
+    "country": "Switzerland",
+    "annual_income": 95070,
+    "monthly_income": 7922.5
+  },
+  "Luxembourg": {
+    "country": "Luxembourg",
+    "annual_income": 83980,
+    "monthly_income": 6998.3
+  },
+  "United States": {
+    "country": "United States",
+    "annual_income": 80450,
+    "monthly_income": 6704.2
+  },
+  "Iceland": {
+    "country": "Iceland",
+    "annual_income": 80400,
+    "monthly_income": 6700.0
+  },
+  "Ireland": {
+    "country": "Ireland",
+    "annual_income": 78970,
+    "monthly_income": 6580.8
+  },
+  "Denmark": {
+    "country": "Denmark",
+    "annual_income": 73340,
+    "monthly_income": 6111.7
+  },
+  "Singapore": {
+    "country": "Singapore",
+    "annual_income": 70590,
+    "monthly_income": 5882.5
+  },
+  "Australia": {
+    "country": "Australia",
+    "annual_income": 63150,
+    "monthly_income": 5262.5
+  },
+  "Netherlands": {
+    "country": "Netherlands",
+    "annual_income": 62540,
+    "monthly_income": 5211.7
+  },
+  "Sweden": {
+    "country": "Sweden",
+    "annual_income": 60480,
+    "monthly_income": 5040.0
+  },
+  "Hong Kong": {
+    "country": "Hong Kong",
+    "annual_income": 55170,
+    "monthly_income": 4597.5
+  },
+  "Austria": {
+    "country": "Austria",
+    "annual_income": 55030,
+    "monthly_income": 4585.8
+  },
+  "Germany": {
+    "country": "Germany",
+    "annual_income": 54800,
+    "monthly_income": 4566.7
+  },
+  "Israel": {
+    "country": "Israel",
+    "annual_income": 54650,
+    "monthly_income": 4554.2
+  },
+  "Belgium": {
+    "country": "Belgium",
+    "annual_income": 54580,
+    "monthly_income": 4548.3
+  },
+  "Canada": {
+    "country": "Canada",
+    "annual_income": 54040,
+    "monthly_income": 4503.3
+  },
+  "Finland": {
+    "country": "Finland",
+    "annual_income": 53230,
+    "monthly_income": 4435.8
+  },
+  "United Arab Emirates": {
+    "country": "United Arab Emirates",
+    "annual_income": 49020,
+    "monthly_income": 4085.0
+  },
+  "New Zealand": {
+    "country": "New Zealand",
+    "annual_income": 48220,
+    "monthly_income": 4018.3
+  },
+  "United Kingdom": {
+    "country": "United Kingdom",
+    "annual_income": 47700,
+    "monthly_income": 3975.0
+  },
+  "Macao": {
+    "country": "Macao",
+    "annual_income": 45960,
+    "monthly_income": 3830.0
+  },
+  "France": {
+    "country": "France",
+    "annual_income": 45180,
+    "monthly_income": 3765.0
+  },
+  "Japan": {
+    "country": "Japan",
+    "annual_income": 39350,
+    "monthly_income": 3279.2
+  },
+  "Italy": {
+    "country": "Italy",
+    "annual_income": 37920,
+    "monthly_income": 3160.0
+  },
+  "South Korea": {
+    "country": "South Korea",
+    "annual_income": 35490,
+    "monthly_income": 2957.5
+  },
+  "Taiwan": {
+    "country": "Taiwan",
+    "annual_income": 33365,
+    "monthly_income": 2780.4
+  },
+  "Cyprus": {
+    "country": "Cyprus",
+    "annual_income": 32960,
+    "monthly_income": 2746.7
+  },
+  "Spain": {
+    "country": "Spain",
+    "annual_income": 32830,
+    "monthly_income": 2735.8
+  },
+  "Saudi Arabia": {
+    "country": "Saudi Arabia",
+    "annual_income": 31860,
+    "monthly_income": 2655.0
+  },
+  "Slovenia": {
+    "country": "Slovenia",
+    "annual_income": 30860,
+    "monthly_income": 2571.7
+  },
+  "Estonia": {
+    "country": "Estonia",
+    "annual_income": 27620,
+    "monthly_income": 2301.7
+  },
+  "Czechia": {
+    "country": "Czechia",
+    "annual_income": 27370,
+    "monthly_income": 2280.8
+  },
+  "Portugal": {
+    "country": "Portugal",
+    "annual_income": 26150,
+    "monthly_income": 2179.2
+  },
+  "Lithuania": {
+    "country": "Lithuania",
+    "annual_income": 25080,
+    "monthly_income": 2090.0
+  },
+  "Slovakia": {
+    "country": "Slovakia",
+    "annual_income": 22790,
+    "monthly_income": 1899.2
+  },
+  "Latvia": {
+    "country": "Latvia",
+    "annual_income": 22630,
+    "monthly_income": 1885.8
+  },
+  "Greece": {
+    "country": "Greece",
+    "annual_income": 22590,
+    "monthly_income": 1882.5
+  },
+  "Croatia": {
+    "country": "Croatia",
+    "annual_income": 20590,
+    "monthly_income": 1715.8
+  },
+  "Poland": {
+    "country": "Poland",
+    "annual_income": 19900,
+    "monthly_income": 1658.3
+  },
+  "Hungary": {
+    "country": "Hungary",
+    "annual_income": 19670,
+    "monthly_income": 1639.2
+  },
+  "Greenland": {
+    "country": "Greenland",
+    "annual_income": 19290,
+    "monthly_income": 1607.5
+  },
+  "Romania": {
+    "country": "Romania",
+    "annual_income": 16660,
+    "monthly_income": 1388.3
+  },
+  "Chile": {
+    "country": "Chile",
+    "annual_income": 15800,
+    "monthly_income": 1316.7
+  },
+  "Bulgaria": {
+    "country": "Bulgaria",
+    "annual_income": 14280,
+    "monthly_income": 1190.0
+  },
+  "Costa Rica": {
+    "country": "Costa Rica",
+    "annual_income": 14260,
+    "monthly_income": 1188.3
+  },
+  "Russia": {
+    "country": "Russia",
+    "annual_income": 14250,
+    "monthly_income": 1187.5
+  },
+  "China": {
+    "country": "China",
+    "annual_income": 13390,
+    "monthly_income": 1115.8
+  },
+  "Argentina": {
+    "country": "Argentina",
+    "annual_income": 12890,
+    "monthly_income": 1074.2
+  },
+  "Mexico": {
+    "country": "Mexico",
+    "annual_income": 11980,
+    "monthly_income": 998.3
+  },
+  "Turkey": {
+    "country": "Turkey",
+    "annual_income": 11730,
+    "monthly_income": 977.5
+  },
+  "Malaysia": {
+    "country": "Malaysia",
+    "annual_income": 11710,
+    "monthly_income": 975.8
+  },
+  "Montenegro": {
+    "country": "Montenegro",
+    "annual_income": 11590,
+    "monthly_income": 965.8
+  },
+  "Serbia": {
+    "country": "Serbia",
+    "annual_income": 10760,
+    "monthly_income": 896.7
+  },
+  "Kazakhstan": {
+    "country": "Kazakhstan",
+    "annual_income": 10730,
+    "monthly_income": 894.2
+  },
+  "Brazil": {
+    "country": "Brazil",
+    "annual_income": 9280,
+    "monthly_income": 773.3
+  },
+  "Bosnia and Herzegovina": {
+    "country": "Bosnia and Herzegovina",
+    "annual_income": 8280,
+    "monthly_income": 690.0
+  },
+  "North Macedonia": {
+    "country": "North Macedonia",
+    "annual_income": 7900,
+    "monthly_income": 658.3
+  },
+  "Belarus": {
+    "country": "Belarus",
+    "annual_income": 7790,
+    "monthly_income": 649.2
+  },
+  "Albania": {
+    "country": "Albania",
+    "annual_income": 7680,
+    "monthly_income": 640.0
+  },
+  "Thailand": {
+    "country": "Thailand",
+    "annual_income": 7200,
+    "monthly_income": 600.0
+  },
+  "Colombia": {
+    "country": "Colombia",
+    "annual_income": 6810,
+    "monthly_income": 567.5
+  },
+  "Armenia": {
+    "country": "Armenia",
+    "annual_income": 6780,
+    "monthly_income": 565.0
+  },
+  "Georgia": {
+    "country": "Georgia",
+    "annual_income": 6710,
+    "monthly_income": 559.2
+  },
+  "Azerbaijan": {
+    "country": "Azerbaijan",
+    "annual_income": 6660,
+    "monthly_income": 555.0
+  },
+  "Ecuador": {
+    "country": "Ecuador",
+    "annual_income": 6590,
+    "monthly_income": 549.2
+  },
+  "South Africa": {
+    "country": "South Africa",
+    "annual_income": 6480,
+    "monthly_income": 540.0
+  },
+  "Moldova": {
+    "country": "Moldova",
+    "annual_income": 6200,
+    "monthly_income": 516.7
+  },
+  "Ukraine": {
+    "country": "Ukraine",
+    "annual_income": 4950,
+    "monthly_income": 412.5
+  },
+  "Indonesia": {
+    "country": "Indonesia",
+    "annual_income": 4810,
+    "monthly_income": 400.8
+  },
+  "Iran": {
+    "country": "Iran",
+    "annual_income": 4650,
+    "monthly_income": 387.5
+  },
+  "Philippines": {
+    "country": "Philippines",
+    "annual_income": 4320,
+    "monthly_income": 360.0
+  },
+  "Vietnam": {
+    "country": "Vietnam",
+    "annual_income": 4110,
+    "monthly_income": 342.5
+  },
+  "Egypt": {
+    "country": "Egypt",
+    "annual_income": 3840,
+    "monthly_income": 320.0
+  },
+  "Bolivia": {
+    "country": "Bolivia",
+    "annual_income": 3620,
+    "monthly_income": 301.7
+  },
+  "Bangladesh": {
+    "country": "Bangladesh",
+    "annual_income": 2880,
+    "monthly_income": 240.0
+  },
+  "Uzbekistan": {
+    "country": "Uzbekistan",
+    "annual_income": 2700,
+    "monthly_income": 225.0
+  },
+  "India": {
+    "country": "India",
+    "annual_income": 2540,
+    "monthly_income": 211.7
+  },
+  "Cambodia": {
+    "country": "Cambodia",
+    "annual_income": 2390,
+    "monthly_income": 199.2
+  },
+  "Nigeria": {
+    "country": "Nigeria",
+    "annual_income": 1880,
+    "monthly_income": 156.7
+  },
+  "Haiti": {
+    "country": "Haiti",
+    "annual_income": 1760,
+    "monthly_income": 146.7
+  },
+  "Kyrgyzstan": {
+    "country": "Kyrgyzstan",
+    "annual_income": 1760,
+    "monthly_income": 146.7
+  },
+  "Cameroon": {
+    "country": "Cameroon",
+    "annual_income": 1690,
+    "monthly_income": 140.8
+  },
+  "Pakistan": {
+    "country": "Pakistan",
+    "annual_income": 1460,
+    "monthly_income": 121.7
+  },
+  "Nepal": {
+    "country": "Nepal",
+    "annual_income": 1430,
+    "monthly_income": 119.2
+  },
+  "Sudan": {
+    "country": "Sudan",
+    "annual_income": 880,
+    "monthly_income": 73.3
+  },
+  "Somalia": {
+    "country": "Somalia",
+    "annual_income": 590,
+    "monthly_income": 49.2
+  },
+  "Afghanistan": {
+    "country": "Afghanistan",
+    "annual_income": 380,
+    "monthly_income": 31.7
+  }
+}
