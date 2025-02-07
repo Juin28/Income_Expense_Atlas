@@ -1,0 +1,506 @@
+[
+  {
+    "country": "Albania",
+    "gross_monthly_income": {
+      "2020": 493.9,
+      "2021": 552.5,
+      "2022": 547.6,
+      "2023": 700.8
+    }
+  },
+  {
+    "country": "Andorra",
+    "gross_monthly_income": {
+      "2020": null,
+      "2021": null,
+      "2022": null,
+      "2023": null
+    }
+  },
+  {
+    "country": "Armenia",
+    "gross_monthly_income": {
+      "2020": 388.0,
+      "2021": 405.0,
+      "2022": 540.7,
+      "2023": 687.9
+    }
+  },
+  {
+    "country": "Austria",
+    "gross_monthly_income": {
+      "2020": 4310.9,
+      "2021": 4639.7,
+      "2022": 4326.3,
+      "2023": 4798.2
+    }
+  },
+  {
+    "country": "Azerbaijan",
+    "gross_monthly_income": {
+      "2020": 416.3,
+      "2021": 430.6,
+      "2022": 494.1,
+      "2023": 549.4
+    }
+  },
+  {
+    "country": "Belarus",
+    "gross_monthly_income": {
+      "2020": 514.4,
+      "2021": 568.7,
+      "2022": 621.8,
+      "2023": 637.0
+    }
+  },
+  {
+    "country": "Belgium",
+    "gross_monthly_income": {
+      "2020": 4360.6,
+      "2021": 4785.8,
+      "2022": 4575.1,
+      "2023": 5107.9
+    }
+  },
+  {
+    "country": "Bosnia and Herzegovina",
+    "gross_monthly_income": {
+      "2020": 859.8,
+      "2021": 932.7,
+      "2022": 926.6,
+      "2023": 1076.6
+    }
+  },
+  {
+    "country": "Bulgaria",
+    "gross_monthly_income": {
+      "2020": 810.3,
+      "2021": 944.2,
+      "2022": 951.8,
+      "2023": 1112.6
+    }
+  },
+  {
+    "country": "Canada",
+    "gross_monthly_income": {
+      "2020": 4496.2,
+      "2021": 4973.0,
+      "2022": 4994.8,
+      "2023": 5003.8
+    }
+  },
+  {
+    "country": "Croatia",
+    "gross_monthly_income": {
+      "2020": 1393.8,
+      "2021": 1507.0,
+      "2022": 1451.2,
+      "2023": 1713.0
+    }
+  },
+  {
+    "country": "Cyprus",
+    "gross_monthly_income": {
+      "2020": 2277.3,
+      "2021": 2429.7,
+      "2022": 2313.3,
+      "2023": 2554.9
+    }
+  },
+  {
+    "country": "Czechia",
+    "gross_monthly_income": {
+      "2020": 1585.6,
+      "2021": 1781.7,
+      "2022": 1779.4,
+      "2023": 2013.0
+    }
+  },
+  {
+    "country": "Denmark",
+    "gross_monthly_income": {
+      "2020": 5744.9,
+      "2021": 6136.0,
+      "2022": 5667.9,
+      "2023": 6023.2
+    }
+  },
+  {
+    "country": "Estonia",
+    "gross_monthly_income": {
+      "2020": 1650.2,
+      "2021": 1743.6,
+      "2022": 1729.9,
+      "2023": 1981.2
+    }
+  },
+  {
+    "country": "Finland",
+    "gross_monthly_income": {
+      "2020": 4088.4,
+      "2021": 4489.2,
+      "2022": 4099.3,
+      "2023": 4350.4
+    }
+  },
+  {
+    "country": "France",
+    "gross_monthly_income": {
+      "2020": 3571.3,
+      "2021": 3909.8,
+      "2022": 3654.9,
+      "2023": 3928.5
+    }
+  },
+  {
+    "country": "Georgia",
+    "gross_monthly_income": {
+      "2020": 383.2,
+      "2021": 404.7,
+      "2022": 529.0,
+      "2023": 706.8
+    }
+  },
+  {
+    "country": "Germany",
+    "gross_monthly_income": {
+      "2020": 4015.9,
+      "2021": 4301.8,
+      "2022": 3986.0,
+      "2023": 4352.8
+    }
+  },
+  {
+    "country": "Greece",
+    "gross_monthly_income": {
+      "2020": 1514.1,
+      "2021": 1603.4,
+      "2022": 1473.8,
+      "2023": 1593.7
+    }
+  },
+  {
+    "country": "Hungary",
+    "gross_monthly_income": {
+      "2020": 1119.4,
+      "2021": 1240.9,
+      "2022": 1203.9,
+      "2023": 1452.2
+    }
+  },
+  {
+    "country": "Iceland",
+    "gross_monthly_income": {
+      "2020": 5855.1,
+      "2021": 6465.3,
+      "2022": 6440.9,
+      "2023": 6778.1
+    }
+  },
+  {
+    "country": "Ireland",
+    "gross_monthly_income": {
+      "2020": 4665.9,
+      "2021": 4981.2,
+      "2022": 4562.9,
+      "2023": 4865.2
+    }
+  },
+  {
+    "country": "Israel",
+    "gross_monthly_income": {
+      "2020": 3342.6,
+      "2021": 3651.6,
+      "2022": 3607.9,
+      "2023": 3506.5
+    }
+  },
+  {
+    "country": "Italy",
+    "gross_monthly_income": {
+      "2020": 2705.2,
+      "2021": 2981.6,
+      "2022": 2779.8,
+      "2023": 2924.4
+    }
+  },
+  {
+    "country": "Kazakhstan",
+    "gross_monthly_income": {
+      "2020": 515.8,
+      "2021": 587.7,
+      "2022": 673.0,
+      "2023": 798.6
+    }
+  },
+  {
+    "country": "Kyrgyzstan",
+    "gross_monthly_income": {
+      "2020": 244.9,
+      "2021": 228.4,
+      "2022": 315.5,
+      "2023": 359.7
+    }
+  },
+  {
+    "country": "Latvia",
+    "gross_monthly_income": {
+      "2020": 1302.6,
+      "2021": 1510.6,
+      "2022": 1443.9,
+      "2023": 1662.2
+    }
+  },
+  {
+    "country": "Liechtenstein",
+    "gross_monthly_income": {
+      "2020": null,
+      "2021": null,
+      "2022": null,
+      "2023": null
+    }
+  },
+  {
+    "country": "Lithuania",
+    "gross_monthly_income": {
+      "2020": 1627.9,
+      "2021": 1867.0,
+      "2022": 1882.8,
+      "2023": 2173.4
+    }
+  },
+  {
+    "country": "Luxembourg",
+    "gross_monthly_income": {
+      "2020": 6415.2,
+      "2021": 7073.3,
+      "2022": 6605.9,
+      "2023": 7291.8
+    }
+  },
+  {
+    "country": "Malta",
+    "gross_monthly_income": {
+      "2020": 1798.6,
+      "2021": 1953.8,
+      "2022": 1838.6,
+      "2023": 1980.7
+    }
+  },
+  {
+    "country": "Monaco",
+    "gross_monthly_income": {
+      "2020": null,
+      "2021": null,
+      "2022": null,
+      "2023": null
+    }
+  },
+  {
+    "country": "Montenegro",
+    "gross_monthly_income": {
+      "2020": 892.3,
+      "2021": 938.0,
+      "2022": 928.6,
+      "2023": 1067.4
+    }
+  },
+  {
+    "country": "Netherlands",
+    "gross_monthly_income": {
+      "2020": 4724.4,
+      "2021": 4996.7,
+      "2022": 4565.3,
+      "2023": 5005.4
+    }
+  },
+  {
+    "country": "North Macedonia",
+    "gross_monthly_income": {
+      "2020": 749.6,
+      "2021": 823.1,
+      "2022": 813.0,
+      "2023": 964.7
+    }
+  },
+  {
+    "country": "Norway",
+    "gross_monthly_income": {
+      "2020": 5241.0,
+      "2021": 6067.5,
+      "2022": 5662.1,
+      "2023": 5436.8
+    }
+  },
+  {
+    "country": "Poland",
+    "gross_monthly_income": {
+      "2020": 1357.5,
+      "2021": 1438.4,
+      "2022": 1358.1,
+      "2023": 1636.4
+    }
+  },
+  {
+    "country": "Portugal",
+    "gross_monthly_income": {
+      "2020": 1756.5,
+      "2021": 1896.7,
+      "2022": 1789.6,
+      "2023": 1983.2
+    }
+  },
+  {
+    "country": "Republic of Moldova",
+    "gross_monthly_income": {
+      "2020": 458.6,
+      "2021": 507.9,
+      "2022": 552.9,
+      "2023": 672.2
+    }
+  },
+  {
+    "country": "Romania",
+    "gross_monthly_income": {
+      "2020": 1228.2,
+      "2021": 1330.4,
+      "2022": 1306.4,
+      "2023": 1609.9
+    }
+  },
+  {
+    "country": "Russian Federation",
+    "gross_monthly_income": {
+      "2020": null,
+      "2021": null,
+      "2022": null,
+      "2023": null
+    }
+  },
+  {
+    "country": "San Marino",
+    "gross_monthly_income": {
+      "2020": null,
+      "2021": null,
+      "2022": null,
+      "2023": null
+    }
+  },
+  {
+    "country": "Serbia",
+    "gross_monthly_income": {
+      "2020": 804.4,
+      "2021": 913.4,
+      "2022": 925.2,
+      "2023": 1094.0
+    }
+  },
+  {
+    "country": "Slovakia",
+    "gross_monthly_income": {
+      "2020": 1457.0,
+      "2021": 1595.9,
+      "2022": 1508.3,
+      "2023": 1705.5
+    }
+  },
+  {
+    "country": "Slovenia",
+    "gross_monthly_income": {
+      "2020": 2515.7,
+      "2021": 2813.9,
+      "2022": 2648.4,
+      "2023": 3058.3
+    }
+  },
+  {
+    "country": "Spain",
+    "gross_monthly_income": {
+      "2020": 2623.2,
+      "2021": 2882.3,
+      "2022": 2661.5,
+      "2023": 2878.8
+    }
+  },
+  {
+    "country": "Sweden",
+    "gross_monthly_income": {
+      "2020": 4084.1,
+      "2021": 4570.8,
+      "2022": 4028.8,
+      "2023": 3982.2
+    }
+  },
+  {
+    "country": "Switzerland",
+    "gross_monthly_income": {
+      "2020": 7689.8,
+      "2021": 8181.0,
+      "2022": 8156.5,
+      "2023": 8764.5
+    }
+  },
+  {
+    "country": "Tajikistan",
+    "gross_monthly_income": {
+      "2020": 135.0,
+      "2021": 136.3,
+      "2022": 159.6,
+      "2023": null
+    }
+  },
+  {
+    "country": "Turkiye",
+    "gross_monthly_income": {
+      "2020": 969.8,
+      "2021": 960.1,
+      "2022": 917.0,
+      "2023": null
+    }
+  },
+  {
+    "country": "Turkmenistan",
+    "gross_monthly_income": {
+      "2020": null,
+      "2021": null,
+      "2022": null,
+      "2023": null
+    }
+  },
+  {
+    "country": "Ukraine",
+    "gross_monthly_income": {
+      "2020": 430.0,
+      "2021": 513.6,
+      "2022": 459.1,
+      "2023": 476.9
+    }
+  },
+  {
+    "country": "United Kingdom",
+    "gross_monthly_income": {
+      "2020": 3883.8,
+      "2021": 4340.0,
+      "2022": 4119.7,
+      "2023": 4462.0
+    }
+  },
+  {
+    "country": "United States",
+    "gross_monthly_income": {
+      "2020": 5852.7,
+      "2021": 6202.1,
+      "2022": 6416.7,
+      "2023": 6676.3
+    }
+  },
+  {
+    "country": "Uzbekistan",
+    "gross_monthly_income": {
+      "2020": 265.6,
+      "2021": 303.0,
+      "2022": 351.3,
+      "2023": 323.7
+    }
+  }
+]
