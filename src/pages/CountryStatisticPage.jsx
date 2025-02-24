@@ -195,10 +195,10 @@ export default function CountryStatisticPage() {
                                         <Cell key={`cell-${index}`} fill={entry.color} />
                                     ))}
                                 </Pie>
-                                <Tooltip formatter={(value) => {
+                                <Tooltip formatter={(value, name) => {
                                     const total = pieData.reduce((sum, entry) => sum + entry.value, 0);
                                     const percentage = ((value / total) * 100).toFixed(2);
-                                    return [`${value} (${percentage}%)`, "Expense"];
+                                    return [`${value} (${percentage}%)`,name];
                                 }} />
                             </PieChart>
                         </ResponsiveContainer>
@@ -207,7 +207,7 @@ export default function CountryStatisticPage() {
                         <h2 className="text-lg font-semibold mb-4">City Expenditure Comparison</h2>
                         <div className="absolute top-0 right-0 mt-2 mr-4">
                             <button onClick={() => setDropdownOpen(!dropdownOpen)} className="border p-2 w-24 bg-black text-left text-sm">
-                                {selectedCategory.replace(/_/g, " ")} ▼
+                                {CATEGORY_MAP[selectedCategory] || selectedCategory.replace(/_/g, " ")} ▼
                             </button>
                             {dropdownOpen && (
                                 <div className="absolute bg-black border mt-1 w-24 shadow-lg max-h-40 overflow-y-auto z-10 text-sm">
@@ -269,7 +269,7 @@ export default function CountryStatisticPage() {
                                                 cy="50%"
                                                 outerRadius={100}
                                                 label={({ name, value }) => {
-                                                    const total = pieData.reduce((sum, entry) => sum + entry.value, 0);
+                                                    const total = cityData.reduce((sum, entry) => sum + entry.value, 0);
                                                     const percentage = ((value / total) * 100).toFixed(2); // Calculate percentage
                                                     return `${name}: ${percentage}%`; // Display category and percentage
                                                 }}
@@ -278,10 +278,10 @@ export default function CountryStatisticPage() {
                                                     <Cell key={`cell-${index}`} fill={entry.color} />
                                                 ))}
                                             </Pie>
-                                            <Tooltip formatter={(value) => {
-                                                const total = pieData.reduce((sum, entry) => sum + entry.value, 0);
+                                            <Tooltip formatter={(value, name) => {
+                                                const total = cityData.reduce((sum, entry) => sum + entry.value, 0);
                                                 const percentage = ((value / total) * 100).toFixed(2);
-                                                return [`${value} (${percentage}%)`, "Expense"];
+                                                return [`${value} (${percentage}%)`, name];
                                             }} />
                                         </PieChart>
                                     </ResponsiveContainer>
