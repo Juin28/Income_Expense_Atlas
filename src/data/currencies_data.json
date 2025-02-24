@@ -1,0 +1,80 @@
+[
+    {
+        "code": "USD",
+        "name": "US Dollar",
+        "flag": "🇺🇸",
+        "exchange_rate": 1.0000
+    },
+    {
+        "code": "EUR",
+        "name": "Euro",
+        "flag": "🇪🇺",
+        "exchange_rate": 0.9555
+    },
+    {
+        "code": "GBP",
+        "name": "British Pound",
+        "flag": "🇬🇧",
+        "exchange_rate": 0.7921
+    },
+    {
+        "code": "JPY",
+        "name": "Japanese Yen",
+        "flag": "🇯🇵",
+        "exchange_rate": 149.7731
+    },
+    {
+        "code": "AUD",
+        "name": "Australian Dollar",
+        "flag": "🇦🇺",
+        "exchange_rate": 1.5752
+    },
+    {
+        "code": "CAD",
+        "name": "Canadian Dollar",
+        "flag": "🇨🇦",
+        "exchange_rate": 1.4261
+    },
+    {
+        "code": "CHF",
+        "name": "Swiss Franc",
+        "flag": "🇨🇭",
+        "exchange_rate": 0.8974
+    },
+    {
+        "code": "CNY",
+        "name": "Chinese Yuan",
+        "flag": "🇨🇳",
+        "exchange_rate": 7.2475
+    },
+    {
+        "code": "INR",
+        "name": "Indian Rupee",
+        "flag": "🇮🇳",
+        "exchange_rate": 86.6597
+    },
+    {
+        "code": "SGD",
+        "name": "Singapore Dollar",
+        "flag": "🇸🇬",
+        "exchange_rate": 1.3393
+    },
+    {
+        "code": "HKD",
+        "name": "Hong Kong Dollar",
+        "flag": "🇭🇰",
+        "exchange_rate": 7.7750
+    },
+    {
+        "code": "SEK",
+        "name": "Swedish Krona",
+        "flag": "🇸🇪",
+        "exchange_rate": 10.6620
+    },
+    {
+        "code": "DKK",
+        "name": "Danish Krone",
+        "flag": "🇩🇰",
+        "exchange_rate": 7.2172
+    }
+]
