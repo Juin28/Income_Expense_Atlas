@@ -18,21 +18,21 @@ import data from "../data/data_latest.json";
 const COLORS = ["#8B2F8A", "#A2539B", "#B977AC", "#CA498C", "#CF9BBD", "#E6BFCE", "#FDE3DF"];
 const CATEGORY_MAP = {
     "Markets": "Groceries",
-    "Clothing And Shoes": "Clothings",
-    "Rent Per Month": "Rent",
+    "Clothing_And_Shoes": "Clothings",
+    "Rent_Per_Month": "Rent",
     "Restaurants": "Dine-out",
-    "Sports And Leisure": "Leisure",
-    "Public Transportation": "Transport",
-    "Utilities (Monthly)": "Utilities"
+    "Sports_And_Leisure": "Leisure",
+    "Public_Transportation": "Transport",
+    "Utilities": "Utilities"
 };
 const COLOR_MAP = {
     "Markets": "#CA498C",
-    "Clothing And Shoes": "#8B2F8A",
-    "Rent Per Month": "#A2539B",
+    "Clothing_And_Shoes": "#8B2F8A",
+    "Rent_Per_Month": "#A2539B",
     "Restaurants": "#B977AC",
-    "Sports And Leisure": "#CF9BBD",
-    "Public Transportation": "#E6BFCE",
-    "Utilities (Monthly)": "#FDE3DF"
+    "Sports_And_Leisure": "#CF9BBD",
+    "Public_Transportation": "#E6BFCE",
+    "Utilities": "#FDE3DF"
 }
 
 
@@ -108,55 +108,29 @@ export default function CountryStatisticPage() {
         return null; // Skip rendering this country if no valid data
     }
 
-    const cityCategoryCounts = Object.keys(countryData.cities).map(city => ({
-        city,
-        count: Object.keys(countryData.cities[city]).filter(category => countryData.cities[city][category] > 0).length
-    }));
+    // Step 1: Get the full list of categories available in the country
+    const countryCategories = Object.keys(latestData).filter(category => latestData[category] > 0);
 
-    const maxCategoryCount = Math.max(...cityCategoryCounts.map(city => city.count), 0);
+    // Step 2: Check each city's category coverage
+    const citiesToDisplay = Object.keys(countryData.cities).filter(city => {
+        const cityCategories = Object.keys(countryData.cities[city]).filter(category => countryData.cities[city][category] > 0);
+        const missingCategories = countryCategories.filter(category => !cityCategories.includes(category));
 
-    const citiesToDisplay = selectedCategory === "All"
-        ? cityCategoryCounts.filter(city => city.count === maxCategoryCount).map(city => city.city)
-        : Object.keys(countryData.cities).filter(city => countryData.cities[city]?.[selectedCategory] > 0);
+        // Keep the city if it's missing fewer than 3 categories
+        return missingCategories.length < 3;
+    });
 
-    // Generate bar data for cities, excluding those with no non-zero values
-    const barData = citiesToDisplay
-        .map(city => {
-            let cityData = { city };
-            let hasNonZeroValue = false;
+    // Step 3: Generate `barData` for cities, appending missing values from country data
+    const barData = citiesToDisplay.map(city => {
+        let cityData = { city };
 
-            if (selectedCategory === "All") {
-                expenseCategories.forEach(category => {
-                    const value = countryData.cities[city]?.[category] || 0;
-                    cityData[CATEGORY_MAP[category]] = value;
-                    if (value > 0) hasNonZeroValue = true;
-                });
-            } else {
-                const value = countryData.cities[city]?.[selectedCategory] || 0;
-                cityData[CATEGORY_MAP[selectedCategory]] = value;
-                if (value > 0) hasNonZeroValue = true;
-            }
-
-            return hasNonZeroValue ? cityData : null;  // Return null for cities with no non-zero values
-        })
-        .filter(cityData => cityData !== null); // Remove cities with null values
-
-
-
-    // Add the country-level data for comparison (directly using the country data)
-    let countryDataEntry = { city: "Country" };  // Use "Country" or another label for the country-level bar
-    if (selectedCategory === "All") {
-        expenseCategories.forEach(category => {
-            // Use the country data directly for each category
-            countryDataEntry[CATEGORY_MAP[category]] = latestData[category] || 0;
+        countryCategories.forEach(category => {
+            // Use the city's value if available; otherwise, use the country's value
+            cityData[CATEGORY_MAP[category]] = countryData.cities[city]?.[category] ?? latestData[category] ?? 0;
         });
-    } else {
-        // Use the selected category for the country data
-        countryDataEntry[CATEGORY_MAP[selectedCategory]] = latestData[selectedCategory] || 0;
-    }
 
-    // Add the country data to the barData
-    barData.unshift(countryDataEntry);  // Adds the country bar as the first element
+        return cityData;
+    });
 
     return (
         <div className="flex min-h-screen bg-black text-white">
@@ -181,14 +155,14 @@ export default function CountryStatisticPage() {
             <div className="w-4/5 p-6">
                 <div className="flex items-center justify-between mb-6">
                     <h1 className="text-5xl font-bold">{countryData.country_name}(2024)</h1>
-                    <h2 className="text-xl">Salary after tax (Country): {latestData.net_salary} {currency}</h2>
+                    <h2 className="text-xl">Salary after tax (Country): {latestData.Net_Salary} {currency}</h2>
                 </div>
                 <hr className="border-t border-white my-4" />
                 <div className="grid grid-cols-2 gap-6 relative">
                     <div className="bg-black p-4 shadow rounded-lg">
                         <h2 className="text-lg font-semibold mb-4">Expenditure Breakdown</h2>
-                        <ResponsiveContainer width="100%" height={600}>
-                            <PieChart>
+                        <ResponsiveContainer width="100%" height={500}>
+                            <PieChart margin={{ top: 20, right: 40, left: 40, bottom: 20 }}>
                                 <Pie
                                     data={pieData}
                                     dataKey="value"
@@ -231,74 +205,84 @@ export default function CountryStatisticPage() {
                                 </div>
                             )}
                         </div>
-                        <ResponsiveContainer width="100%" height={600}>
-                            <BarChart data={barData}>
-                                <XAxis dataKey="city" />
-                                <YAxis />
-                                <Tooltip />
-                                <Legend />
+                        {barData.length > 0 ? ( // Only display BarChart if there are cities in barData
+                            <ResponsiveContainer width="100%" height={500}>
+                                <BarChart data={barData} margin={{ top: 20, right: 40, left: 60, bottom: 20 }}>
+                                    <XAxis dataKey="city" />
+                                    <YAxis />
+                                    <Tooltip />
+                                    <Legend />
 
-                                {/* Add ReferenceLine for Country Value */}
-                                {selectedCategory !== "All" && (
-                                    <ReferenceLine
-                                        y={latestData[selectedCategory] || 0}  // Country's value
-                                        stroke="white"
-                                        strokeDasharray="4 4"  // Makes it dotted
-                                        label={{
-                                            value: `Country: ${latestData[(selectedCategory === "All" ? ["Total_Expenses"] : [selectedCategory])] || 0}`,
-                                            position: "right",
-                                            fill: "white",
-                                            fontSize: 12
-                                        }}
-                                    />
-                                )}
-
-                                {(selectedCategory === "All" ? expenseCategories : [selectedCategory]).map((category, index) => (
-                                    <Bar
-                                        key={CATEGORY_MAP[category] || category}
-                                        dataKey={CATEGORY_MAP[category] || category}
-                                        stackId={selectedCategory === "All" ? "a" : undefined}
-                                        fill={COLOR_MAP[category]}
-                                        barSize={30}
-                                    >
-                                        {/* Use Label to display inside the bar */}
-                                        <LabelList
-                                            dataKey={CATEGORY_MAP[category] || category}
-                                            position="center" // Places label at the center of the bar
-                                            valueAccessor={({ value }) => Math.round(value)} // Explicit rounding before displaying
-                                            fill="#fff" // White text to contrast with dark bars
-                                            fontSize={10} // Smaller font size to fit inside bars
+                                    {/* Add ReferenceLine for Country Value */}
+                                    {selectedCategory !== "All" && (
+                                        <ReferenceLine
+                                            y={latestData[selectedCategory] || 0}  // Country's value
+                                            stroke="white"
+                                            strokeDasharray="4 4"  // Makes it dotted
+                                            label={{
+                                                value: `${countryData.country_code} AVG: ${latestData[selectedCategory] || 0}`,
+                                                position: "left",
+                                                fill: "white",
+                                                fontSize: 12
+                                            }}
                                         />
-                                    </Bar>
-                                ))}
-                            </BarChart>
-                        </ResponsiveContainer>
+                                    )}
+
+                                    {(selectedCategory === "All" ? expenseCategories : [selectedCategory]).map((category, index) => (
+                                        <Bar
+                                            key={CATEGORY_MAP[category] || category}
+                                            dataKey={CATEGORY_MAP[category] || category}
+                                            stackId={selectedCategory === "All" ? "a" : undefined}
+                                            fill={COLOR_MAP[category]}
+                                            barSize={30}
+                                        >
+                                            {/* Use Label to display inside the bar */}
+                                            <LabelList
+                                                dataKey={CATEGORY_MAP[category] || category}
+                                                position="center" // Places label at the center of the bar
+                                                valueAccessor={({ value }) => Math.round(value)} // Explicit rounding before displaying
+                                                fill="#fff" // White text to contrast with dark bars
+                                                fontSize={10} // Smaller font size to fit inside bars
+                                            />
+                                        </Bar>
+                                    ))}
+                                </BarChart>
+                            </ResponsiveContainer>
+                        ) : (
+                            <p style={{ textAlign: "center", color: "white", fontSize: "16px" }}>
+                                No eligible city data available. Showing country-level analysis only.
+                            </p>
+                        )}
                     </div>
                     {/* City-wise Pie Charts */}
-                    {Object.keys(countryData.cities).map(city => {
-                        const cityData = expenseCategories.map((category, index) => ({
-                            name: CATEGORY_MAP[category] || category, // Use mapped name
-                            value: countryData.cities[city][category] || 0,
-                            color: COLOR_MAP[category]
-                        })).filter(item => item.value > 0);
+                    {citiesToDisplay.map(city => {
+                        const cityData = expenseCategories
+                            .map(category => ({
+                                name: category, // Keep the original category name
+                                value: countryData.cities[city]?.[category] > 0
+                                    ? countryData.cities[city][category]
+                                    : latestData[category] || 0, // Fill missing values with country data
+                                color: COLOR_MAP[category] || "#ccc" // Get the correct color
+                            }))
+                            .filter(item => item.value > 0); // Exclude zero values
 
                         if (cityData.length > 0) {
                             return (
                                 <div key={city} className="bg-black p-4 shadow rounded-lg">
                                     <h3 className="text-lg font-semibold mb-4">{city} Expenditure Breakdown</h3>
                                     <ResponsiveContainer width="100%" height={300}>
-                                        <PieChart>
+                                        <PieChart margin={{ top: 20, right: 40, left: 40, bottom: 20 }}>
                                             <Pie
                                                 data={cityData}
                                                 dataKey="value"
                                                 nameKey="name"
                                                 cx="50%"
                                                 cy="50%"
-                                                outerRadius={100}
+                                                outerRadius={80}
                                                 label={({ name, value }) => {
                                                     const total = cityData.reduce((sum, entry) => sum + entry.value, 0);
                                                     const percentage = ((value / total) * 100).toFixed(2); // Calculate percentage
-                                                    return `${name}: ${percentage}%`; // Display category and percentage
+                                                    return `${CATEGORY_MAP[name]}: ${percentage}%`; // Display category and percentage
                                                 }}
                                             >
                                                 {cityData.map((entry, index) => (
