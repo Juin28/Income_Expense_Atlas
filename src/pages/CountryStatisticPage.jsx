@@ -12,7 +12,7 @@ import {
     ResponsiveContainer,
     LabelList, Label
 } from "recharts";
-import {useLocation} from "react-router-dom";
+import {useNavigate, useLocation} from "react-router-dom";
 import data from "../data/data_latest.json";
 
 const COLORS = ["#8B2F8A", "#A2539B", "#B977AC", "#CA498C", "#CF9BBD", "#E6BFCE", "#FDE3DF"];
@@ -52,12 +52,19 @@ export default function CountryStatisticPage() {
 
     const processedData = roundValues(data);
 
+    const navigate = useNavigate();
     const { search } = useLocation();  // Get the search query from the URL
     const [selectedCountry, setSelectedCountry] = useState("SWE");
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [currency, setCurrency] = useState("USD");
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState("");
+
+    // Function to update selected country and update URL
+    const handleCountrySelection = (countryCode) => {
+        setSelectedCountry(countryCode);
+        navigate(`/country-statistics/country?countryName=${countryCode}`);
+    };
 
     const expenseCategories = Object.keys(CATEGORY_MAP);
 
@@ -81,9 +88,13 @@ export default function CountryStatisticPage() {
         const countryCode = params.get("countryName");
 
         if (validCountries.includes(countryCode)) {
-            setSelectedCountry(countryCode);  // Set selected country from query parameter
+            handleCountrySelection(countryCode);
+        }
+        else{
+            handleCountrySelection("SWE");
         }
     }, [search]); // This hook will run whenever the URL changes
+
 
     const countryData = processedData[selectedCountry] || { country: {}, cities: {} };
     const latestData = countryData.country || {};
@@ -162,7 +173,8 @@ export default function CountryStatisticPage() {
                 {validCountries
                     .filter(code => processedData[code].country_name.toLowerCase().includes(searchTerm.toLowerCase()))
                     .map(code => (
-                        <button key={code} className={`block w-full p-2 text-left ${selectedCountry === code ? "bg-blue-400 text-white" : "bg-black"}`} onClick={() => setSelectedCountry(code)}>
+                        <button key={code} className={`block w-full p-2 text-left ${selectedCountry === code ? "bg-blue-400 text-white" : "bg-black"}`}
+                                onClick={() => handleCountrySelection(code)}>
                             {processedData[code].country_name}
                         </button>
                     ))}
@@ -170,7 +182,7 @@ export default function CountryStatisticPage() {
             <div className="w-4/5 p-6">
                 <div className="flex items-center justify-between mb-6">
                     <h1 className="text-5xl font-bold">{countryData.country_name}(2024)</h1>
-                    <h2 className="text-xl">Income after tax (Country): {latestData.net_salary} {currency}</h2>
+                    <h2 className="text-xl">Salary after tax (Country): {latestData.net_salary} {currency}</h2>
                 </div>
                 <hr className="border-t border-white my-4" />
                 <div className="grid grid-cols-2 gap-6 relative">
