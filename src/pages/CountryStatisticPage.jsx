@@ -14,6 +14,7 @@ import {
 } from "recharts";
 import {useNavigate, useLocation} from "react-router-dom";
 import data from "../data/data_latest.json";
+import currencies from "../data/currencies_data.json";
 
 const COLORS = ["#8B2F8A", "#A2539B", "#B977AC", "#CA498C", "#CF9BBD", "#E6BFCE", "#FDE3DF"];
 const CATEGORY_MAP = {
@@ -132,14 +133,37 @@ export default function CountryStatisticPage() {
         return cityData;
     });
 
+    const updatedBarData = barData.map((entry) => {
+        return {
+            ...entry,
+            // Multiply each numerical category by the exchange rate of the selected currency
+            ...Object.keys(entry).reduce((acc, key) => {
+                if (typeof entry[key] === "number") {
+                    // Multiply only the numerical values by the exchange rate
+                    acc[key] = Math.round(entry[key] * (currencies.find(currencyOption => currencyOption.code === currency)?.exchange_rate || 1));
+                } else {
+                    // Keep non-numerical values like city names intact
+                    acc[key] = entry[key];
+                }
+                return acc;
+            }, {}),
+        };
+    });
+
     return (
         <div className="flex min-h-screen bg-black text-white">
             <div className="w-1/5 p-4 bg-gray-900 border-l overflow-y-auto fixed right-0 h-full">
                 <h2 className="text-lg font-semibold mb-4">Currency</h2>
-                <select className="border p-2 w-full mb-4" value={currency} onChange={(e) => setCurrency(e.target.value)}>
-                    <option value="EUR">EUR</option>
-                    <option value="USD">USD</option>
-                    <option value="GBP">GBP</option>
+                <select
+                    value={currency}
+                    onChange={(e) => setCurrency(e.target.value)}
+                    className="mt-2 w-full p-2 rounded border border-gray-600 bg-gray-700 focus:outline-none focus:border-cyan-500"
+                >
+                    {currencies.map(currencyOption => (
+                        <option key={currencyOption.code} value={currencyOption.code}>
+                            {currencyOption.flag} {currencyOption.name} ({currencyOption.code})
+                        </option>
+                    ))}
                 </select>
                 <h2 className="text-lg font-semibold mb-4">Select Country</h2>
                 <input type="text" placeholder="Search..." className="border p-2 w-full mb-2" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
@@ -155,14 +179,21 @@ export default function CountryStatisticPage() {
             <div className="w-4/5 p-6">
                 <div className="flex items-center justify-between mb-6">
                     <h1 className="text-5xl font-bold">{countryData.country_name}(2024)</h1>
-                    <h2 className="text-xl">Salary after tax (Country): {latestData.Net_Salary} {currency}</h2>
+                    <h2 className="text-xl">
+                        Salary after tax (Country):{" "}
+                        {latestData.Net_Salary ?
+                            ( (latestData.Net_Salary * (currencies.find(currencyOption => currencyOption.code === currency)?.exchange_rate || 1))
+                                .toFixed(2) )
+                            : "N/A"}{" "}
+                        {currency}
+                    </h2>
                 </div>
                 <hr className="border-t border-white my-4" />
                 <div className="grid grid-cols-2 gap-6 relative">
                     <div className="bg-black p-4 shadow rounded-lg">
                         <h2 className="text-lg font-semibold mb-4">Expenditure Breakdown</h2>
                         <ResponsiveContainer width="100%" height={500}>
-                            <PieChart margin={{ top: 20, right: 40, left: 40, bottom: 20 }}>
+                            <PieChart margin={{ top: 20, right: 60, left: 40, bottom: 20 }}>
                                 <Pie
                                     data={pieData}
                                     dataKey="value"
@@ -183,7 +214,8 @@ export default function CountryStatisticPage() {
                                 <Tooltip formatter={(value, name) => {
                                     const total = pieData.reduce((sum, entry) => sum + entry.value, 0);
                                     const percentage = ((value / total) * 100).toFixed(2);
-                                    return [`${value} (${percentage}%)`,name];
+                                    const currency_value = (value * (currencies.find(currencyOption => currencyOption.code === currency)?.exchange_rate || 1)).toFixed(2);
+                                    return [`${currency_value}(${percentage}%)`,name];
                                 }} />
                             </PieChart>
                         </ResponsiveContainer>
@@ -205,22 +237,22 @@ export default function CountryStatisticPage() {
                                 </div>
                             )}
                         </div>
-                        {barData.length > 0 ? ( // Only display BarChart if there are cities in barData
+                        {updatedBarData.length > 0 ? (
                             <ResponsiveContainer width="100%" height={500}>
-                                <BarChart data={barData} margin={{ top: 20, right: 40, left: 60, bottom: 20 }}>
+                                <BarChart data={updatedBarData} margin={{ top: 20, right: 40, left: 60, bottom: 20 }}>
                                     <XAxis dataKey="city" />
                                     <YAxis />
                                     <Tooltip />
                                     <Legend />
 
                                     {/* Add ReferenceLine for Country Value */}
-                                    {selectedCategory !== "All" && (
+                                    {selectedCategory !== "Allan" && (
                                         <ReferenceLine
-                                            y={latestData[selectedCategory] || 0}  // Country's value
+                                            y={(latestData[selectedCategory] * (currencies.find(currencyOption => currencyOption.code === currency)?.exchange_rate || 1)).toFixed(2) || 0}  // Country's value
                                             stroke="white"
                                             strokeDasharray="4 4"  // Makes it dotted
                                             label={{
-                                                value: `${countryData.country_code} AVG: ${latestData[selectedCategory] || 0}`,
+                                                value: `${countryData.country_code} AVG: ${(latestData[selectedCategory] * (currencies.find(currencyOption => currencyOption.code === currency)?.exchange_rate || 1)).toFixed(2) || 0}`,
                                                 position: "left",
                                                 fill: "white",
                                                 fontSize: 12
@@ -240,7 +272,7 @@ export default function CountryStatisticPage() {
                                             <LabelList
                                                 dataKey={CATEGORY_MAP[category] || category}
                                                 position="center" // Places label at the center of the bar
-                                                valueAccessor={({ value }) => Math.round(value)} // Explicit rounding before displaying
+                                                valueAccessor="value"
                                                 fill="#fff" // White text to contrast with dark bars
                                                 fontSize={10} // Smaller font size to fit inside bars
                                             />
@@ -253,6 +285,7 @@ export default function CountryStatisticPage() {
                                 No eligible city data available. Showing country-level analysis only.
                             </p>
                         )}
+
                     </div>
                     {/* City-wise Pie Charts */}
                     {citiesToDisplay.map(city => {
@@ -290,9 +323,10 @@ export default function CountryStatisticPage() {
                                                 ))}
                                             </Pie>
                                             <Tooltip formatter={(value, name) => {
-                                                const total = cityData.reduce((sum, entry) => sum + entry.value, 0);
+                                                const total = pieData.reduce((sum, entry) => sum + entry.value, 0);
                                                 const percentage = ((value / total) * 100).toFixed(2);
-                                                return [`${value} (${percentage}%)`, name];
+                                                const currency_value = (value * (currencies.find(currencyOption => currencyOption.code === currency)?.exchange_rate || 1)).toFixed(2);
+                                                return [`${currency_value}(${percentage}%)`,name];
                                             }} />
                                         </PieChart>
                                     </ResponsiveContainer>
