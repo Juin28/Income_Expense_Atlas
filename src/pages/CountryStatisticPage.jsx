@@ -63,7 +63,7 @@ export default function CountryStatisticPage() {
     // Function to update selected country and update URL
     const handleCountrySelection = (countryCode) => {
         setSelectedCountry(countryCode);
-        navigate(`/country-statistics/country?countryName=${countryCode}`);
+        navigate(`/country-statistics/country?countryCode=${countryCode}`);
     };
 
     const expenseCategories = Object.keys(CATEGORY_MAP);
@@ -81,11 +81,10 @@ export default function CountryStatisticPage() {
         return pieData.length > 0; // Only include countries with valid pieData
     });
 
-    // Extract the countryName from URL query parameter
+    // Extract the countryCode from URL query parameter
     useEffect(() => {
         const params = new URLSearchParams(search);
-        // This countryName is actually contryCode
-        const countryCode = params.get("countryName");
+        const countryCode = params.get("countryCode");
 
         if (validCountries.includes(countryCode)) {
             handleCountrySelection(countryCode);
