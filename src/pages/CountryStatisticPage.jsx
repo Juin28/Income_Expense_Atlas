@@ -323,7 +323,7 @@ export default function CountryStatisticPage() {
                                                 ))}
                                             </Pie>
                                             <Tooltip formatter={(value, name) => {
-                                                const total = pieData.reduce((sum, entry) => sum + entry.value, 0);
+                                                const total = cityData.reduce((sum, entry) => sum + entry.value, 0);
                                                 const percentage = ((value / total) * 100).toFixed(2);
                                                 const currency_value = (value * (currencies.find(currencyOption => currencyOption.code === currency)?.exchange_rate || 1)).toFixed(2);
                                                 return [`${currency_value}(${percentage}%)`,name];
