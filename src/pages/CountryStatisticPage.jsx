@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     PieChart,
     Pie,
@@ -12,6 +12,7 @@ import {
     ResponsiveContainer,
     LabelList, Label
 } from "recharts";
+import {useLocation} from "react-router-dom";
 import data from "../data/data_latest.json";
 
 const COLORS = ["#8B2F8A", "#A2539B", "#B977AC", "#CA498C", "#CF9BBD", "#E6BFCE", "#FDE3DF"];
@@ -51,6 +52,7 @@ export default function CountryStatisticPage() {
 
     const processedData = roundValues(data);
 
+    const { search } = useLocation();  // Get the search query from the URL
     const [selectedCountry, setSelectedCountry] = useState("SWE");
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [currency, setCurrency] = useState("USD");
@@ -71,6 +73,17 @@ export default function CountryStatisticPage() {
 
         return pieData.length > 0; // Only include countries with valid pieData
     });
+
+    // Extract the countryName from URL query parameter
+    useEffect(() => {
+        const params = new URLSearchParams(search);
+        // This countryName is actually contryCode
+        const countryCode = params.get("countryName");
+
+        if (validCountries.includes(countryCode)) {
+            setSelectedCountry(countryCode);  // Set selected country from query parameter
+        }
+    }, [search]); // This hook will run whenever the URL changes
 
     const countryData = processedData[selectedCountry] || { country: {}, cities: {} };
     const latestData = countryData.country || {};
