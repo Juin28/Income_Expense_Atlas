@@ -10,7 +10,7 @@ import {
     YAxis,
     Legend,
     ResponsiveContainer,
-    LabelList, Label
+    LabelList, Label, ReferenceLine
 } from "recharts";
 import {useNavigate, useLocation} from "react-router-dom";
 import data from "../data/data_latest.json";
@@ -237,6 +237,22 @@ export default function CountryStatisticPage() {
                                 <YAxis />
                                 <Tooltip />
                                 <Legend />
+
+                                {/* Add ReferenceLine for Country Value */}
+                                {selectedCategory !== "All" && (
+                                    <ReferenceLine
+                                        y={latestData[selectedCategory] || 0}  // Country's value
+                                        stroke="white"
+                                        strokeDasharray="4 4"  // Makes it dotted
+                                        label={{
+                                            value: `Country: ${latestData[(selectedCategory === "All" ? ["Total_Expenses"] : [selectedCategory])] || 0}`,
+                                            position: "right",
+                                            fill: "white",
+                                            fontSize: 12
+                                        }}
+                                    />
+                                )}
+
                                 {(selectedCategory === "All" ? expenseCategories : [selectedCategory]).map((category, index) => (
                                     <Bar
                                         key={CATEGORY_MAP[category] || category}
