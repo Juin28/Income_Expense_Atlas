@@ -242,7 +242,11 @@ export default function CountryStatisticPage() {
                                 <BarChart data={updatedBarData} margin={{ top: 20, right: 40, left: 60, bottom: 20 }}>
                                     <XAxis dataKey="city" />
                                     <YAxis />
-                                    <Tooltip />
+                                    <Tooltip
+                                        contentStyle={{
+                                            backgroundColor: "#222"
+                                        }}
+                                    />
                                     <Legend />
 
                                     {/* Add ReferenceLine for Country Value */}
