@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+
+// Reference: Recharts Documentation (https://recharts.org/en-US/guide/getting-started)
+// Used Recharts library for PieChart and BarChart visualization
 import {
     PieChart,
     Pie,
@@ -38,6 +41,12 @@ const COLOR_MAP = {
 
 
 export default function CountryStatisticPage() {
+    /**
+     * Rounds all numerical values in a JSON object to two decimal places.
+     * Inspired by Stack Overflow discussion: https://stackoverflow.com/questions/44181348/round-off-decimals-values-in-all-objects-of-a-json-object
+     * @param {Object} obj - The object to process.
+     * @returns {Object} - The rounded object.
+     */
     const roundValues = (obj) => {
         if (typeof obj === "number") {
             return Math.round(obj * 100) / 100; // Round to 2 decimal places
@@ -74,6 +83,10 @@ export default function CountryStatisticPage() {
         const countryData = processedData[code] || { country: {}, cities: {} };
         const latestData = countryData.country || {};
 
+        /*
+        Reference: MDN Web Docs (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map)
+        Used Array.map to transform data for visualization.
+        */
         const pieData = expenseCategories.map((category, index) => ({
             name: category.replace(/_/g, " ").toUpperCase(),
             value: latestData[category] || 0,
@@ -133,6 +146,15 @@ export default function CountryStatisticPage() {
         return cityData;
     });
 
+
+    /**
+     * Update the bar data by dealing with missing values
+     * For those cities with no less than 3 categories than its country, append the missing values of these categories with the country values.
+     * Otherwise, eliminate this city for display.
+     * Discussed and Agreed by the Group on 24 Feb
+     * @param barData - The original bar data.
+     * @returns updatedBarData - The updated bar data with missing values handled.
+     */
     const updatedBarData = barData.map((entry) => {
         return {
             ...entry,
