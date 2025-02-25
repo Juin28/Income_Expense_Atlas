@@ -36,7 +36,7 @@ import Layout from './Layout';
 
 function App() {
   return (
-    <Router basename="/DH2321_Project"> 
+    <Router basename="/DH2321_Project"> // Set the basename to the repository name
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<EarnAndSpendPage />} />
