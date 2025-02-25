@@ -228,8 +228,9 @@ export default function CountryStatisticPage() {
                     </h2>
                 </div>
                 <hr className="border-t border-white my-4" />
-                <div className="grid grid-cols-2 gap-6 relative">
-                    <div className="bg-black p-4 shadow rounded-lg">
+                <div className={updatedBarData.length > 7 ? "flex flex-col gap-6" : "grid grid-cols-2 gap-6"}>
+
+                <div className="bg-black p-4 shadow rounded-lg">
                         <h2 className="text-lg font-semibold mb-4">Expenditure Breakdown</h2>
                         <ResponsiveContainer width="100%" height={500}>
                             <PieChart margin={{ top: 20, right: 60, left: 40, bottom: 20 }}>
