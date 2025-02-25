@@ -102,7 +102,7 @@ const EarnAndSpendPage = () => {
     useEffect(() => {
         if (!selectedCountry) return;
 
-        navigate(`/country-statistics/country?countryCode=${selectedCountry}`);
+        navigate(`/DH2321_Project/country-statistics/country?countryCode=${selectedCountry}`);
     }, [selectedCountry]);
 
     // World Map component
