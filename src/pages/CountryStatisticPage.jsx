@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 // Reference: Recharts Documentation (https://recharts.org/en-US/guide/getting-started)
 // Used Recharts library for PieChart and BarChart visualization
@@ -175,7 +175,7 @@ export default function CountryStatisticPage() {
     return (
         <div className="flex min-h-screen bg-black text-white">
             <div className="w-1/5 p-4 bg-gray-900 border-l overflow-y-auto fixed right-0 h-full">
-                <h2 className="text-lg font-semibold mb-4">Currency</h2>
+                <h2 className="text-sm font-semibold mt-4">Currency</h2>
                 <select
                     value={currency}
                     onChange={(e) => setCurrency(e.target.value)}
@@ -187,16 +187,33 @@ export default function CountryStatisticPage() {
                         </option>
                     ))}
                 </select>
-                <h2 className="text-lg font-semibold mb-4">Select Country</h2>
-                <input type="text" placeholder="Search..." className="border p-2 w-full mb-2" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-                {validCountries
-                    .filter(code => processedData[code].country_name.toLowerCase().includes(searchTerm.toLowerCase()))
-                    .map(code => (
-                        <button key={code} className={`block w-full p-2 text-left ${selectedCountry === code ? "bg-blue-400 text-white" : "bg-black"}`}
-                                onClick={() => handleCountrySelection(code)}>
-                            {processedData[code].country_name}
-                        </button>
-                    ))}
+                <h2 className="text-sm font-semibold mt-4">Select Country</h2>
+                <input
+                    type="text"
+                    placeholder="🔎   Search country"
+                    className="mt-2 w-full p-2 rounded border border-gray-600 bg-gray-700 focus:outline-none focus:border-cyan-500"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <div className="mt-4 overflow-y-auto h-[calc(100vh-200px)]">
+                    {validCountries
+                        .filter(code =>
+                            processedData[code].country_name.toLowerCase().includes(searchTerm.toLowerCase())
+                        )
+                        .sort((a, b) =>
+                            processedData[a].country_name.localeCompare(processedData[b].country_name)
+                        ) // Sort alphabetically
+                        .map(code => (
+                            <button
+                                key={code}
+                                className={`block w-full text-left p-1 pl-8 transition-transform duration-200 transform my-auto 
+                ${selectedCountry === code ? "bg-blue-400 text-white font-bold" : "hover:bg-cyan-200 hover:text-black hover:font-bold hover:scale-105"}`}
+                                onClick={() => handleCountrySelection(code)}
+                            >
+                                {processedData[code].country_name}
+                            </button>
+                        ))}
+                </div>
             </div>
             <div className="w-4/5 p-6">
                 <div className="flex items-center justify-between mb-6">
