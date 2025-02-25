@@ -12,7 +12,8 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route index element={<EarnAndSpendPage />} />
+        <Route path="/" element={<EarnAndSpendPage />} />
+        {/* <Route index element={<EarnAndSpendPage />} /> */}
         <Route path="/country-compare" element={<CountryComparePage />} />
         <Route path="/country-statistics/country?" element={<CountryStatisticPage />} />
         <Route path="/budget-visualizer" element={<BudgetVisualizerPage />} />
