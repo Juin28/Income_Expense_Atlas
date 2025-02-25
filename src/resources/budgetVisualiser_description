@@ -1,0 +1,104 @@
+## Budget Visualiser 
+
+### User Flow
+
+#### Case 1: Budget Above Average Expenditure
+
+1. **User Enters Budget:**
+- User inputs a budget (e.g., $3500).
+
+2. **Data Retrieval:**
+- The app retrieves average expenditure data for the selected country.
+
+3. **Display Sliders:**
+- Sliders for each category are displayed with default values based on the average monetary values from the database (e.g., Rent: $1200, Groceries: $300, etc.).
+
+4. **Sankey Diagram Visualization:**
+- A Sankey diagram is shown, illustrating the budget allocation and remaining savings.
+
+5. **Case 1.1: User Reduces Slider Value:**
+- If the user reduces the value of a slider (e.g., reduce dine-out from $300 to $200):
+- The app recalculates the savings.
+- The Sankey diagram updates to reflect the new allocation and increased savings.
+
+6. **Case 1.2: User Increases Slider Value:**
+- If the user increases the value of a slider (e.g., increase groceries from $300 to $500):
+- The app recalculates the savings.
+- If savings reach $0:
+- Disable the specific category slider to prevent further increases.
+- Display a message:
+- "Your budget is not enough to cover this allocation. Please adjust your categories to stay within your budget."
+
+---
+
+#### Case 2: Budget Below Average Expenditure
+
+1. **User Enters Budget:**
+- User inputs a budget (e.g., $1500).
+
+2. **Data Retrieval:**
+- The app retrieves average expenditure data for the selected country.
+
+3. **Calculate Default Slider Values:**
+- Default values for sliders are calculated based on the user’s budget and the percentages from the dataset:
+- For example, if the budget is $1500 and rent is 40%, set Rent slider to $600.
+
+4. **Budget Insufficient Message:**
+- Display a message:
+- "Your budget is $950 lower than the average expenditure in this country. The average expenditure is $2450."
+
+5. **Display Sliders:**
+- Sliders for each category are shown with default values based on the calculated values from the budget.
+
+6. **Sankey Diagram Visualization:**
+- A Sankey diagram is displayed, showing total budget, category allocations, and savings (initially $0).
+
+7. **Case 2.1: User Reduces Slider Value:**
+- If the user reduces the value of a slider (e.g., reduce transport from $75 to $50):
+- The app recalculates the savings, which may now be greater than $0.
+- The Sankey diagram updates accordingly.
+
+8. **Case 2.2: User Increases Slider Value:**
+- If the user increases the value of a slider (e.g., increase groceries from $150 to $200):
+- The app recalculates the savings.
+- If savings reach $0:
+- Disable the specific category slider to prevent further increases.
+- Display a message:
+- "Your budget is not enough to cover this allocation. Please adjust your categories to stay within your budget."
+
+### Function Description
+
+#### Function: `handleBudgetInput`
+
+**Description:**
+This function processes the user's budget input and updates the UI accordingly based on whether the budget is above or below the average expenditure for the selected country. It handles slider values, recalculates savings, and updates the Sankey diagram.
+
+**Parameters:**
+- `userBudget` (Number): The monthly budget entered by the user.
+- `countryData` (Object): The average expenditure data for the selected country, including percentage allocations for each category.
+
+**Logic:**
+1. **Calculate Total Expenditure:**
+- Retrieve average expenditure values from `countryData`.
+- Calculate `totalExpenditure` based on the average values.
+
+2. **Determine Case:**
+- If `userBudget > totalExpenditure` (Case 1):
+- Display sliders with default values as average monetary values.
+- Calculate initial savings: `savings = userBudget - totalExpenditure`.
+- Show Sankey diagram with budget breakdown.
+- If `userBudget < totalExpenditure` (Case 2):
+- Calculate default slider values based on percentages:
+- For each category: `sliderValue = userBudget * (percentage / 100)`.
+- Display a message indicating how much lower the user’s budget is compared to the average expenditure.
+- Set initial savings to $0 and show the Sankey diagram.
+
+3. **Slider Adjustment Logic:**
+- On slider value change:
+- Recalculate savings based on new allocations.
+- Update the Sankey diagram.
+- If savings become $0:
+- Disable the corresponding slider and display a warning message.
+
+4. **Return Updated State:**
+- Return the updated state of the budget, slider values, and savings for rendering in the UI.
