@@ -9,8 +9,8 @@ export default function Sidebar(props) {
         hoveredCountry,
         activeTab,
         fieldOfSpending, 
-        selectedCurrency, 
-        setSelectedCurrency, 
+        // selectedCurrency, 
+        // setSelectedCurrency, 
         setFieldOfSpending, 
         setHoveredCountry,
         setSelectedCountry 
@@ -35,9 +35,9 @@ export default function Sidebar(props) {
         setSearchTerm(event.target.value);
     };
 
-    const handleCurrencyChange = (event) => {
-        setSelectedCurrency(event.target.value);
-    };
+    // const handleCurrencyChange = (event) => {
+    //     setSelectedCurrency(event.target.value);
+    // };
 
     const handleFieldOfSpendingChange = (event) => {
         setFieldOfSpending(event.target.value);
@@ -71,7 +71,7 @@ export default function Sidebar(props) {
     return (
         <div className="w-64 h-screen bg-gray-800 text-white overflow-hidden">
             <div className="p-4 sticky top-0 bg-gray-800 z-10">
-                <h2 className="text-sm font-semibold">Currency</h2>
+                {/* <h2 className="text-sm font-semibold">Currency</h2>
                 <select
                     value={selectedCurrency}
                     onChange={handleCurrencyChange}
@@ -82,7 +82,7 @@ export default function Sidebar(props) {
                             {currencyOption.flag} {currencyOption.name} ({currencyOption.code})
                         </option>
                     ))}
-                </select>
+                </select> */}
 
                 {activeTab === "spend" && (
                     <div>
