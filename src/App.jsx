@@ -14,7 +14,7 @@ function App() {
       <Route path="/" element={<Layout />}>
         <Route index element={<EarnAndSpendPage />} />
         <Route path="/country-compare" element={<CountryComparePage />} />
-        <Route path="/country-statistics/country?" element={<CountryStatisticPage />} />
+        <Route path="/country-statistics/country" element={<CountryStatisticPage />} />
         <Route path="/budget-visualizer" element={<BudgetVisualizerPage />} />
         <Route path="/information" element={<InformationPage />} />
         <Route path="*" element={<div>Not Found</div>} />
