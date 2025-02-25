@@ -9,9 +9,8 @@ import HeatmapBar from "../components/EarnAndSpend/HeatMapBar";
 const EarnAndSpendPage = () => {
     const navigate = useNavigate(); 
     const [activeTab, setActiveTab] = useState("earn");
-    const [selectedCurrency, setSelectedCurrency] = useState("USD");
+    // const [selectedCurrency, setSelectedCurrency] = useState("USD");
     const [worldData, setWorldData] = useState(null);
-
     const [countrySalaries, setcountrySalaries] = useState({});
     const [countryExpenses, setcountryExpenses] = useState({});
     const [hoveredCountry, setHoveredCountry] = useState(null);
@@ -387,8 +386,8 @@ const EarnAndSpendPage = () => {
                     hoveredCountry={hoveredCountry}
                     activeTab={activeTab}
                     fieldOfSpending={fieldOfSpending}
-                    selectedCurrency={selectedCurrency}
-                    setSelectedCurrency={setSelectedCurrency}
+                    // selectedCurrency={selectedCurrency}
+                    // setSelectedCurrency={setSelectedCurrency}
                     setFieldOfSpending={setFieldOfSpending}
                     setHoveredCountry={setHoveredCountry}
                     setSelectedCountry={setSelectedCountry}
