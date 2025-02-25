@@ -228,7 +228,7 @@ export default function CountryStatisticPage() {
                     </h2>
                 </div>
                 <hr className="border-t border-white my-4" />
-                <div className={updatedBarData.length > 7 ? "flex flex-col gap-6" : "grid grid-cols-2 gap-6"}>
+                <div className={updatedBarData.length > 7 || updatedBarData.length === 0 ? "flex flex-col gap-6" : "grid grid-cols-2 gap-6"}>
 
                 <div className="bg-black p-4 shadow rounded-lg">
                         <h2 className="text-lg font-semibold mb-4">Expenditure Breakdown</h2>
@@ -261,75 +261,67 @@ export default function CountryStatisticPage() {
                         </ResponsiveContainer>
                     </div>
                     <div className="bg-black p-4 shadow rounded-lg relative">
-                        <h2 className="text-lg font-semibold mb-4">City Expenditure Comparison</h2>
-                        <div className="absolute top-0 right-0 mt-2 mr-4">
-                            <button onClick={() => setDropdownOpen(!dropdownOpen)} className="border p-2 w-24 bg-black text-left text-sm">
-                                {CATEGORY_MAP[selectedCategory] || selectedCategory.replace(/_/g, " ")} ▼
-                            </button>
-                            {dropdownOpen && (
-                                <div className="absolute bg-black border mt-1 w-24 shadow-lg max-h-40 overflow-y-auto z-10 text-sm">
-                                    <div className="p-2 hover:bg-blue-400" onClick={() => { setSelectedCategory("All"); setDropdownOpen(false); }}>All</div>
-                                    {expenseCategories.map((category, index) => (
-                                        <div key={category} className="p-2 hover:bg-blue-400" onClick={() => { setSelectedCategory(category); setDropdownOpen(false); }}>
-                                            {CATEGORY_MAP[category] || category} {/* Show mapped name */}
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
+
                         {updatedBarData.length > 0 ? (
-                            <ResponsiveContainer width="100%" height={500}>
-                                <BarChart data={updatedBarData} margin={{ top: 20, right: 40, left: 60, bottom: 20 }}>
-                                    <XAxis dataKey="city" />
-                                    <YAxis />
-                                    <Tooltip
-                                        contentStyle={{
-                                            backgroundColor: "#222"
-                                        }}
-                                    />
-                                    <Legend />
-
-                                    {/* Add ReferenceLine for Country Value */}
-                                    {selectedCategory !== "Allan" && (
-                                        <ReferenceLine
-                                            y={(latestData[selectedCategory] * (currencies.find(currencyOption => currencyOption.code === currency)?.exchange_rate || 1)).toFixed(2) || 0}  // Country's value
-                                            stroke="white"
-                                            strokeDasharray="4 4"  // Makes it dotted
-                                            label={{
-                                                value: `${countryData.country_code} AVG: ${(latestData[selectedCategory] * (currencies.find(currencyOption => currencyOption.code === currency)?.exchange_rate || 1)).toFixed(2) || 0}`,
-                                                position: "left",
-                                                fill: "white",
-                                                fontSize: 12
-                                            }}
-                                        />
+                            <>
+                                <h2 className="text-lg font-semibold mb-4">City Expenditure Comparison</h2>
+                                {/* Dropdown Container */}
+                                <div className="absolute top-0 right-0 mt-2 mr-4">
+                                    <button onClick={() => setDropdownOpen(!dropdownOpen)} className="border p-2 w-24 bg-black text-left text-sm">
+                                        {CATEGORY_MAP[selectedCategory] || selectedCategory.replace(/_/g, " ")} ▼
+                                    </button>
+                                    {dropdownOpen && (
+                                        <div className="absolute bg-black border mt-1 w-24 shadow-lg max-h-40 overflow-y-auto z-10 text-sm">
+                                            <div className="p-2 hover:bg-blue-400" onClick={() => { setSelectedCategory("All"); setDropdownOpen(false); }}>All</div>
+                                            {expenseCategories.map((category) => (
+                                                <div key={category} className="p-2 hover:bg-blue-400" onClick={() => { setSelectedCategory(category); setDropdownOpen(false); }}>
+                                                    {CATEGORY_MAP[category] || category}
+                                                </div>
+                                            ))}
+                                        </div>
                                     )}
+                                </div>
 
-                                    {(selectedCategory === "All" ? expenseCategories : [selectedCategory]).map((category, index) => (
-                                        <Bar
-                                            key={CATEGORY_MAP[category] || category}
-                                            dataKey={CATEGORY_MAP[category] || category}
-                                            stackId={selectedCategory === "All" ? "a" : undefined}
-                                            fill={COLOR_MAP[category]}
-                                            barSize={30}
-                                        >
-                                            {/* Use Label to display inside the bar */}
-                                            <LabelList
-                                                dataKey={CATEGORY_MAP[category] || category}
-                                                position="center" // Places label at the center of the bar
-                                                valueAccessor="value"
-                                                fill="#fff" // White text to contrast with dark bars
-                                                fontSize={10} // Smaller font size to fit inside bars
+                                {/* Bar Chart Container */}
+                                <ResponsiveContainer width="100%" height={500}>
+                                    <BarChart data={updatedBarData} margin={{ top: 20, right: 40, left: 60, bottom: 80 }}>
+                                        <XAxis dataKey="city" angle={-65} textAnchor="end" />
+                                        <YAxis />
+                                        <Tooltip contentStyle={{ backgroundColor: "#222" }} />
+                                        <Legend layout="horizontal" verticalAlign="top" align="center" />
+
+                                        {selectedCategory !== "Allan" && (
+                                            <ReferenceLine
+                                                y={(latestData[selectedCategory] * (currencies.find(currencyOption => currencyOption.code === currency)?.exchange_rate || 1)).toFixed(2) || 0}
+                                                stroke="white"
+                                                strokeDasharray="4 4"
+                                                label={{
+                                                    value: `${countryData.country_code} AVG: ${(latestData[selectedCategory] * (currencies.find(currencyOption => currencyOption.code === currency)?.exchange_rate || 1)).toFixed(2) || 0}`,
+                                                    position: "left",
+                                                    fill: "white",
+                                                    fontSize: 12
+                                                }}
                                             />
-                                        </Bar>
-                                    ))}
-                                </BarChart>
-                            </ResponsiveContainer>
+                                        )}
+
+                                        {(selectedCategory === "All" ? expenseCategories : [selectedCategory]).map((category) => (
+                                            <Bar key={CATEGORY_MAP[category] || category} dataKey={CATEGORY_MAP[category] || category} stackId={selectedCategory === "All" ? "a" : undefined} fill={COLOR_MAP[category]} barSize={30}>
+                                                <LabelList
+                                                    dataKey={CATEGORY_MAP[category] || category}
+                                                    position="center"
+                                                    fill="#fff"
+                                                    fontSize={10}
+                                                />
+                                            </Bar>
+                                        ))}
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </>
                         ) : (
                             <p style={{ textAlign: "center", color: "white", fontSize: "16px" }}>
                                 No eligible city data available. Showing country-level analysis only.
                             </p>
                         )}
-
                     </div>
                     {/* City-wise Pie Charts */}
                     {citiesToDisplay.map(city => {
