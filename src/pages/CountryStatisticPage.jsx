@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 // Reference: Recharts Documentation (https://recharts.org/en-US/guide/getting-started)
 // Used Recharts library for PieChart and BarChart visualization
