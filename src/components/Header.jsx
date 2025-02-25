@@ -6,32 +6,32 @@ export default function Header() {
     return (
         <div className="bg-gray-800 p-4 flex justify-around">
             <Link
-                to="/"
-                className={`text-gray-300 hover:text-white transition duration-300 ${location.pathname === "/" ? "font-bold text-white underline" : ""}`}
+                to="/DH2321_Project"
+                className={`text-gray-300 hover:text-white transition duration-300 ${location.pathname === "/DH2321_Project/" ? "font-bold text-white underline" : ""}`}
             >
                 Earn & Spend Map
             </Link>
             <Link
-                to="/country-compare"
-                className={`text-gray-300 hover:text-white transition duration-300 ${location.pathname === "/country-compare" ? "font-bold text-white underline" : ""}`}
+                to="/DH2321_Project/country-compare"
+                className={`text-gray-300 hover:text-white transition duration-300 ${location.pathname === "/DH2321_Project/country-compare" ? "font-bold text-white underline" : ""}`}
             >
                 Compare
             </Link>
             <Link
-                to="/country-statistics/country?countryCode=USA"
-                className={`text-gray-300 hover:text-white transition duration-300 ${location.pathname.startsWith("/country-statistics") ? "font-bold text-white underline" : ""}`}
+                to="/DH2321_Project/country-statistics/country?countryCode=USA"
+                className={`text-gray-300 hover:text-white transition duration-300 ${location.pathname.startsWith("/DH2321_Project/country-statistics") ? "font-bold text-white underline" : ""}`}
             >
                 Country Statistics
             </Link>
             <Link
-                to="/budget-visualizer"
-                className={`text-gray-300 hover:text-white transition duration-300 ${location.pathname === "/budget-visualizer" ? "font-bold text-white underline" : ""}`}
+                to="DH2321_Project//budget-visualizer"
+                className={`text-gray-300 hover:text-white transition duration-300 ${location.pathname === "/DH2321_Project/budget-visualizer" ? "font-bold text-white underline" : ""}`}
             >
                 Budget Visualizer
             </Link>
             <Link
-                to="/information"
-                className={`text-gray-300 hover:text-white transition duration-300 ${location.pathname === "/information" ? "font-bold text-white underline" : ""}`}
+                to="/DH2321_Project/information"
+                className={`text-gray-300 hover:text-white transition duration-300 ${location.pathname === "/DH2321_Project/information" ? "font-bold text-white underline" : ""}`}
             >
                 Information & About Us
             </Link>

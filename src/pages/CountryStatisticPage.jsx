@@ -73,7 +73,7 @@ export default function CountryStatisticPage() {
     // Function to update selected country and update URL
     const handleCountrySelection = (countryCode) => {
         setSelectedCountry(countryCode);
-        navigate(`/country-statistics/country?countryCode=${countryCode}`);
+        navigate(`/DH2321_Project/country-statistics/country?countryCode=${countryCode}`);
     };
 
     const expenseCategories = Object.keys(CATEGORY_MAP);

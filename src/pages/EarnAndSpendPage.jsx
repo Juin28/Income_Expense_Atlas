@@ -5,13 +5,13 @@ import allData from "../data/data_latest.json";
 import Sidebar from "../components/EarnAndSpend/Sidebar";
 import ToggleButton from "../components/EarnAndSpend/ToggleButton";
 import HeatmapBar from "../components/EarnAndSpend/HeatMapBar";
+import printMinAndMaxValues from "../components/EarnAndSpend/PrintMinMax";
 
 const EarnAndSpendPage = () => {
     const navigate = useNavigate(); 
     const [activeTab, setActiveTab] = useState("earn");
-    const [selectedCurrency, setSelectedCurrency] = useState("USD");
+    // const [selectedCurrency, setSelectedCurrency] = useState("USD");
     const [worldData, setWorldData] = useState(null);
-
     const [countrySalaries, setcountrySalaries] = useState({});
     const [countryExpenses, setcountryExpenses] = useState({});
     const [hoveredCountry, setHoveredCountry] = useState(null);
@@ -61,105 +61,6 @@ const EarnAndSpendPage = () => {
         .domain([0, 450])
         .range([expenseMinHex, expenseMaxHex]);
 
-    // Development function to print min and max values
-    function printMinAndMaxValues(data) {
-        let salaryMin = Infinity;
-        let salaryMax = -Infinity;
-        let expenseMin = Infinity;
-        let expenseMax = -Infinity;
-        let marketsMin = Infinity;
-        let marketsMax = -Infinity;
-        let clothingMin = Infinity;
-        let clothingMax = -Infinity;
-        let rentMin = Infinity;
-        let rentMax = -Infinity;
-        let restaurantsMin = Infinity;
-        let restaurantsMax = -Infinity;
-        let publicTransportationMin = Infinity;
-        let publicTransportationMax = -Infinity;
-        let utilitiesMin = Infinity;
-        let utilitiesMax = -Infinity;
-        let sportsMin = Infinity;
-        let sportsMax = -Infinity;
-
-        for (const countryCode in data) {
-            const salaryValue = data[countryCode].country.Net_Salary;
-            const expenseValue = data[countryCode].country.Total_Expenses;
-            const marketsValue = data[countryCode].country.Markets;
-            const clothingValue = data[countryCode].country.Clothing_And_Shoes;
-            const rentValue = data[countryCode].country.Rent_Per_Month;
-            const restaurantsValue = data[countryCode].country.Restaurants;
-            const publicTransportationValue = data[countryCode].country.Public_Transportation;
-            const utilitiesValue = data[countryCode].country.Utilities;
-            const sportsValue = data[countryCode].country.Sports_And_Leisure;
-            
-            if (salaryValue < salaryMin) {
-                salaryMin = salaryValue;
-            }
-            if (salaryValue > salaryMax) {
-                salaryMax = salaryValue;
-            }
-            if (expenseValue < expenseMin) {
-                expenseMin = expenseValue;
-            }
-            if (expenseValue > expenseMax) {
-                expenseMax = expenseValue;
-            }  
-            if (marketsValue < marketsMin) {
-                marketsMin = marketsValue;
-            }
-            if (marketsValue > marketsMax) {
-                marketsMax = marketsValue;
-            }
-            if (clothingValue < clothingMin) {
-                clothingMin = clothingValue;
-            }
-            if (clothingValue > clothingMax) {
-                clothingMax = clothingValue;
-            }
-            if (rentValue < rentMin) {
-                rentMin = rentValue;
-            }
-            if (rentValue > rentMax) {
-                rentMax = rentValue;
-            }
-            if (restaurantsValue < restaurantsMin) {
-                restaurantsMin = restaurantsValue;
-            }
-            if (restaurantsValue > restaurantsMax) {
-                restaurantsMax = restaurantsValue;
-            }
-            if (publicTransportationValue < publicTransportationMin) {
-                publicTransportationMin = publicTransportationValue;
-            }
-            if (publicTransportationValue > publicTransportationMax) {
-                publicTransportationMax = publicTransportationValue;
-            }
-            if (utilitiesValue < utilitiesMin) {
-                utilitiesMin = utilitiesValue;
-            }
-            if (utilitiesValue > utilitiesMax) {
-                utilitiesMax = utilitiesValue;
-            }
-            if (sportsValue < sportsMin) {
-                sportsMin = sportsValue;
-            }
-            if (sportsValue > sportsMax) {
-                sportsMax = sportsValue;
-            }
-        }
-
-        console.log(`Salary min: ${salaryMin}, Salary max: ${salaryMax}`);
-        console.log(`Expense min: ${expenseMin}, Expense max: ${expenseMax}`);
-        console.log(`Markets min: ${marketsMin}, Markets max: ${marketsMax}`);
-        console.log(`Clothing min: ${clothingMin}, Clothing max: ${clothingMax}`);
-        console.log(`Rent min: ${rentMin}, Rent max: ${rentMax}`);
-        console.log(`Restaurants min: ${restaurantsMin}, Restaurants max: ${restaurantsMax}`);
-        console.log(`Public Transportation min: ${publicTransportationMin}, Public Transportation max: ${publicTransportationMax}`);
-        console.log(`Utilities min: ${utilitiesMin}, Utilities max: ${utilitiesMax}`);
-        console.log(`Sports min: ${sportsMin}, Sports max: ${sportsMax}`);
-    }
-
     // Fetch world map data
     useEffect(() => {
         const fetchWorldData = async () => {
@@ -201,7 +102,7 @@ const EarnAndSpendPage = () => {
     useEffect(() => {
         if (!selectedCountry) return;
 
-        navigate(`/country-statistics/country?countryCode=${selectedCountry}`);
+        navigate(`/DH2321_Project/country-statistics/country?countryCode=${selectedCountry}`);
     }, [selectedCountry]);
 
     // World Map component
@@ -387,8 +288,8 @@ const EarnAndSpendPage = () => {
                     hoveredCountry={hoveredCountry}
                     activeTab={activeTab}
                     fieldOfSpending={fieldOfSpending}
-                    selectedCurrency={selectedCurrency}
-                    setSelectedCurrency={setSelectedCurrency}
+                    // selectedCurrency={selectedCurrency}
+                    // setSelectedCurrency={setSelectedCurrency}
                     setFieldOfSpending={setFieldOfSpending}
                     setHoveredCountry={setHoveredCountry}
                     setSelectedCountry={setSelectedCountry}
