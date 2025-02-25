@@ -4,34 +4,34 @@
         "email": "juin@kth.se",
         "role": "Development Lead",
         "education": "BEng in Computer Science with an Extended Major in Artificial Intelligence, HKUST",
-        "photo": "../public/juin.png"
+        "photo": "../juin.png"
     },
     {
         "name": "Yolanda Wang Yuning",
         "email": "yuningwa@kth.se",
         "role": "Frontend Development",
         "education": "BEng in Computer Science with Minor in Mathematics, HKUST",
-        "photo": "../public/yolanda.png"
+        "photo": "../yolanda.png"
     },
     {
         "name": "Arjun Kumaresh",
         "email": "kumaresh@kth.se",
         "role": "Frontend Development",
         "education": "BEng in Computer Science, NTU",
-        "photo": "../public/arjun.png"
+        "photo": "../arjun.png"
     },
     {
         "name": "Weng lo Cheang",
         "email": "cheang@kth.se",
         "role": "UI/UX Design",
         "education": "BEng in Computer Science with an Extended Major in Artificial Intelligence, HKUST",
-        "photo": "../public/yoyo.png"
+        "photo": "../yoyo.png"
     },
     {
         "name": "Woojin Kim",
         "email": "woojin@kth.se",
         "role": "Data Handling & Processing",
         "education": "BEng & BBA Dual Degree Program in Technology & Management, HKUST",
-        "photo": "../public/woojin.png"
+        "photo": "../woojin.png"
     }
 ]
