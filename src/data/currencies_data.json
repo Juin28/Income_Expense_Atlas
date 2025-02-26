@@ -76,5 +76,29 @@
         "name": "Danish Krone",
         "flag": "🇩🇰",
         "exchange_rate": 7.2172
+    },
+    {
+        "code": "MYR",
+        "name": "Malaysian Ringgit",
+        "flag": "🇲🇾",
+        "exchange_rate": 4.4283
+    },
+    {
+        "code": "KRW",
+        "name": "South Korean Won",
+        "flag": "🇰🇷",
+        "exchange_rate": 1434.5548
+    },
+    {
+        "code": "NZD",
+        "name": "New Zealand Dollar",
+        "flag": "🇳🇿",
+        "exchange_rate": 1.7566
+    },
+    {
+        "code": "TWD",
+        "name": "Taiwan Dollar",
+        "flag": "🇹🇼",
+        "exchange_rate": 32.8072
     }
 ]
