@@ -323,6 +323,8 @@ export default function CountryStatisticPage() {
                             </p>
                         )}
                     </div>
+                </div>
+                <div className={"grid grid-cols-2 gap-6"}>
                     {/* City-wise Pie Charts */}
                     {citiesToDisplay.map(city => {
                         const cityData = expenseCategories
