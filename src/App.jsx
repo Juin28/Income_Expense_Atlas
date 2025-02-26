@@ -12,11 +12,12 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route index element={<EarnAndSpendPage />} />
-        <Route path="/country-compare" element={<CountryComparePage />} />
-        <Route path="/country-statistics/country?" element={<CountryStatisticPage />} />
-        <Route path="/budget-visualizer" element={<BudgetVisualizerPage />} />
-        <Route path="/information" element={<InformationPage />} />
+        <Route path="/DH2321_Project" element={<EarnAndSpendPage />} />
+        {/* <Route index element={<EarnAndSpendPage />} /> */}
+        <Route path="/DH2321_Project/country-compare" element={<CountryComparePage />} />
+        <Route path="/DH2321_Project/country-statistics/country?" element={<CountryStatisticPage />} />
+        <Route path="/DH2321_Project/budget-visualizer" element={<BudgetVisualizerPage />} />
+        <Route path="/DH2321_Project/information" element={<InformationPage />} />
         <Route path="*" element={<div>Not Found</div>} />
       </Route>
     </Routes>

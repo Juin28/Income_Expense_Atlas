@@ -15,7 +15,7 @@ const EarnAndSpendPage = () => {
     const [countrySalaries, setcountrySalaries] = useState({});
     const [countryExpenses, setcountryExpenses] = useState({});
     const [hoveredCountry, setHoveredCountry] = useState(null);
-    const [fieldOfSpending, setFieldOfSpending] = useState("General");
+    const [fieldOfSpending, setFieldOfSpending] = useState("All");
     const [selectedCountry, setSelectedCountry] = useState(null);
 
     const mapRef = useRef();
@@ -102,7 +102,7 @@ const EarnAndSpendPage = () => {
     useEffect(() => {
         if (!selectedCountry) return;
 
-        navigate(`/country-statistics/country?countryCode=${selectedCountry}`);
+        navigate(`/DH2321_Project/country-statistics/country?countryCode=${selectedCountry}`);
     }, [selectedCountry]);
 
     // World Map component
@@ -140,25 +140,25 @@ const EarnAndSpendPage = () => {
                         const salaryValue = countrySalaries[countryId] || 0;
                         return salaryValue > 0 ? salaryColorScale(salaryValue) : "#808080";
                     } else if (activeTab === "spend") {
-                        if (fieldOfSpending === "General") {
+                        if (fieldOfSpending === "All") {
                             const expenseValue = countryExpenses[countryId]?.Total_Expenses || 0;
                             return expenseValue > 0 ? expenseColorScale(expenseValue) : "#808080";
-                        } else if (fieldOfSpending === "Clothing & Shoes") {
+                        } else if (fieldOfSpending === "Clothings") {
                             const expenseValue = countryExpenses[countryId]?.Clothing || 0;
                             return expenseValue > 0 ? clothingExpenseColorScale(expenseValue) : "#808080";
                         } else if (fieldOfSpending === "Groceries") {
                             const expenseValue = countryExpenses[countryId]?.Markets || 0;
                             return expenseValue > 0 ? marketExpenseColorScale(expenseValue) : "#808080";
-                        } else if (fieldOfSpending === "Public Transport") {
+                        } else if (fieldOfSpending === "Transport") {
                             const expenseValue = countryExpenses[countryId]?.Public_Transportation || 0;
                             return expenseValue > 0 ? publicTransportationExpenseColorScale(expenseValue) : "#808080";
                         } else if (fieldOfSpending === "Rent") {
                             const expenseValue = countryExpenses[countryId]?.Rent || 0;
                             return expenseValue > 0 ? rentExpenseColorScale(expenseValue) : "#808080";
-                        } else if (fieldOfSpending === "Restaurants") {
+                        } else if (fieldOfSpending === "Dine-out") {
                             const expenseValue = countryExpenses[countryId]?.Restaurants || 0;
                             return expenseValue > 0 ? restaurantExpenseColorScale(expenseValue) : "#808080";
-                        } else if (fieldOfSpending === "Sports & Leisure") {
+                        } else if (fieldOfSpending === "Leisure") {
                             const expenseValue = countryExpenses[countryId]?.Sports || 0;
                             return expenseValue > 0 ? sportExpenseColorScale(expenseValue) : "#808080";
                         } else if (fieldOfSpending === "Utilities") {
@@ -177,19 +177,19 @@ const EarnAndSpendPage = () => {
                         setHoveredCountry(countryId);
                     // } else if (activeTab === "spend" && countryExpenses[countryId] > 0) {
                     } else if (activeTab === "spend") {
-                        if (fieldOfSpending === "General" && countryExpenses[countryId]?.Total_Expenses > 0) {
+                        if (fieldOfSpending === "All" && countryExpenses[countryId]?.Total_Expenses > 0) {
                             setHoveredCountry(countryId);
-                        } else if (fieldOfSpending === "Clothing & Shoes" && countryExpenses[countryId]?.Clothing > 0) {
+                        } else if (fieldOfSpending === "Clothings" && countryExpenses[countryId]?.Clothing > 0) {
                             setHoveredCountry(countryId);
                         } else if (fieldOfSpending === "Groceries" && countryExpenses[countryId]?.Markets > 0) {
                             setHoveredCountry(countryId);
-                        } else if (fieldOfSpending === "Public Transport" && countryExpenses[countryId]?.Public_Transportation > 0) {
+                        } else if (fieldOfSpending === "Transport" && countryExpenses[countryId]?.Public_Transportation > 0) {
                             setHoveredCountry(countryId);
                         } else if (fieldOfSpending === "Rent" && countryExpenses[countryId]?.Rent > 0) {
                             setHoveredCountry(countryId);
-                        } else if (fieldOfSpending === "Restaurants" && countryExpenses[countryId]?.Restaurants > 0) {
+                        } else if (fieldOfSpending === "Dine-out" && countryExpenses[countryId]?.Restaurants > 0) {
                             setHoveredCountry(countryId);
-                        } else if (fieldOfSpending === "Sports & Leisure" && countryExpenses[countryId]?.Sports > 0) {
+                        } else if (fieldOfSpending === "Leisure" && countryExpenses[countryId]?.Sports > 0) {
                             setHoveredCountry(countryId);
                         } else if (fieldOfSpending === "Utilities" && countryExpenses[countryId]?.Utilities > 0) {
                             setHoveredCountry(countryId);
@@ -208,19 +208,19 @@ const EarnAndSpendPage = () => {
                         setSelectedCountry(countryId);
                     // } else if (activeTab === "spend" && countryExpenses[countryId] > 0) {
                     } else if (activeTab === "spend" ) {
-                        if (fieldOfSpending === "General" && countryExpenses[countryId]?.Total_Expenses > 0) {
+                        if (fieldOfSpending === "All" && countryExpenses[countryId]?.Total_Expenses > 0) {
                             setSelectedCountry(countryId);
-                        } else if (fieldOfSpending === "Clothing & Shoes" && countryExpenses[countryId]?.Clothing > 0) {
+                        } else if (fieldOfSpending === "Clothings" && countryExpenses[countryId]?.Clothing > 0) {
                             setSelectedCountry(countryId);
                         } else if (fieldOfSpending === "Groceries" && countryExpenses[countryId]?.Markets > 0) {
                             setSelectedCountry(countryId);
-                        } else if (fieldOfSpending === "Public Transport" && countryExpenses[countryId]?.Public_Transportation > 0) {
+                        } else if (fieldOfSpending === "Transport" && countryExpenses[countryId]?.Public_Transportation > 0) {
                             setSelectedCountry(countryId);
                         } else if (fieldOfSpending === "Rent" && countryExpenses[countryId]?.Rent > 0) {
                             setSelectedCountry(countryId);
-                        } else if (fieldOfSpending === "Restaurants" && countryExpenses[countryId]?.Restaurants > 0) {
+                        } else if (fieldOfSpending === "Dine-out" && countryExpenses[countryId]?.Restaurants > 0) {
                             setSelectedCountry(countryId);
-                        } else if (fieldOfSpending === "Sports & Leisure" && countryExpenses[countryId]?.Sports > 0) {
+                        } else if (fieldOfSpending === "Leisure" && countryExpenses[countryId]?.Sports > 0) {
                             setSelectedCountry(countryId);
                         } else if (fieldOfSpending === "Utilities" && countryExpenses[countryId]?.Utilities > 0) {
                             setSelectedCountry(countryId);
