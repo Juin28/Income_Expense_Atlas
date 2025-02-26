@@ -226,7 +226,7 @@ export default function InformationPage() {
                     <h3 className="font-semibold text-xl mb-2">Acknowledgement</h3>
                     <ol className="list-decimal list-inside text-gray-200">
                         <li>
-                            The Viral 50 project was a very helpful source of design inspiration for the world map part of this project.
+                            The Viral 50 project provided valuable design inspiration for world map part of this project.
                         </li>
                     </ol>
                 </div>
