@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { ChevronDown, ArrowUpDown, Minus } from 'lucide-react';
 import { Tooltip } from "react-tooltip";
+import countriesData from "C:\\Users\\User\\DH2321_Project\\src\\data\\data_latest.json"
 
 export default function CountryComparePage() {
     const [selectedCountries, setSelectedCountries] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
-    const [baseLocation, setBaseLocation] = useState('USA');
+    const [baseLocation, setBaseLocation] = useState('United States');
     const [isBaseDropdownOpen, setIsBaseDropdownOpen] = useState(false);
     const [isSortDropdownOpen, setIsSortDropdownOpen]=useState(false);
     const [sortOption, setSortOption]=useState(false);
@@ -14,32 +15,22 @@ export default function CountryComparePage() {
 
     // Country-level data
     const countryData = {
-        'USA': { income: 6000, spending: 1000 },
-        'Sweden': { income: 5000, spending: 1120 },
-        'Japan': { income: 4000, spending: 700 },
-        'Australia': { income: 4500, spending: 3800 },
-        'Belgium': { income: 3800, spending: 3200 },
-        'Austria': { income: 4200, spending: 3600 },
-        'Andorra': { income: 4800, spending: 4000 }
     };
+    const countries=[];
 
     // City-level data
     const cityData = {
-        'New York': { income: 7200, spending: 2300, country: 'USA' },
-        'Los Angeles': { income: 6800, spending: 2100, country: 'USA' },
-        'Chicago': { income: 6500, spending: 1900, country: 'USA' },
-        'Stockholm': { income: 5300, spending: 1300, country: 'Sweden' },
-        'Gothenburg': { income: 4800, spending: 1100, country: 'Sweden' },
-        'Tokyo': { income: 4500, spending: 900, country: 'Japan' },
-        'Osaka': { income: 4000, spending: 800, country: 'Japan' },
-        'Sydney': { income: 5100, spending: 4200, country: 'Australia' },
-        'Melbourne': { income: 4900, spending: 4000, country: 'Australia' },
-        'Brussels': { income: 4100, spending: 3400, country: 'Belgium' },
-        'Antwerp': { income: 3900, spending: 3300, country: 'Belgium' },
-        'Vienna': { income: 4400, spending: 3800, country: 'Austria' },
-        'Salzburg': { income: 4200, spending: 3500, country: 'Austria' },
-        'Andorra la Vella': { income: 5100, spending: 4200, country: 'Andorra' }
     };
+    for (const [countryCode, countryInfo] of Object.entries(countriesData)) {
+        countryData[countryInfo.country_name] = { ...countryInfo.country };
+        countries.push(countryInfo.country_name)
+        if (countryInfo.cities) {
+            for (const [cityName, cityInfo] of Object.entries(countryInfo.cities)) {
+                cityData[cityName] = { ...cityInfo, country: countryCode };
+            }
+        }
+    }
+    console.log(countryData);
 
     // Get the current data set based on level type
     const getCurrentData = () => {
@@ -60,30 +51,26 @@ export default function CountryComparePage() {
         const currentData = getCurrentData();
         
         if (levelType === 'country') {
-            if (!baseLocation || !countryData[baseLocation] || !countryData[location]) return 0;
+            if (!currentData[location]) return 0;
             if (location === baseLocation) return 100; // Base location always has 100
             
             // Calculate based on income ratio and spending efficiency
-            const baseIncome = countryData[baseLocation].income;
-            const locationIncome = countryData[location].income;
+            const baseIncomeExpensesRatio = countryData[baseLocation].Net_Salary/countryData[baseLocation].Total_Expenses;
+            const locationIncomeExpensesRatio = countryData[location].Net_Salary/countryData[location].Total_Expenses;
             
             // Income ratio determines the base value
-            const incomeRatio = locationIncome / baseIncome;
-            
-            // Following the pattern in the image:
-            if (location === 'Sweden') return 114;
-            if (location === 'Japan') return 94;
+            const incomeRatio = locationIncomeExpensesRatio / baseIncomeExpensesRatio;
             
             // For other locations, approximate the PPS based on the pattern
-            return Math.round(100 * incomeRatio + (Math.random() * 10));
+            return Math.round(100 * incomeRatio);
         } else {
             // City level comparison
             if (!baseLocation || !cityData[baseLocation] || !cityData[location]) return 0;
             if (location === baseLocation) return 100; // Base location always has 100
             
             // Calculate based on income ratio between cities
-            const baseIncome = cityData[baseLocation].income;
-            const locationIncome = cityData[location].income;
+            const baseIncome = cityData[baseLocation].Net_Salary;
+            const locationIncome = cityData[location].Net_Salary;
             
             // Income ratio determines the base value
             const incomeRatio = locationIncome / baseIncome;
@@ -98,28 +85,33 @@ export default function CountryComparePage() {
         const currentData = getCurrentData();
         
         if (levelType === 'country') {
-            if (!baseLocation || !countryData[baseLocation] || !countryData[location]) return "0%";
+            if (!currentData[location]) return "0%";
             if (location === baseLocation) return "0%";
             
             const baseValue = countryData[baseLocation][metric];
+            console.log(countryData[baseLocation]);
             const locationValue = countryData[location][metric];
             const percentDiff = ((locationValue - baseValue) / baseValue * 100).toFixed(0);
-            
+            if(isNaN(percentDiff)){
+                return 'NaN';
+            }
             // Return with +/- sign
-            const sign = percentDiff > 0 ? "+" : "";
-            return `${sign}${sign} ${Math.abs(percentDiff)}%`;
+            const sign = percentDiff > 0 ? "+" : "-";
+            return `${sign} ${Math.abs(percentDiff)}%`;
         } else {
             // City level comparison
-            if (!baseLocation || !cityData[baseLocation] || !cityData[location]) return "0%";
             if (location === baseLocation) return "0%";
             
             const baseValue = cityData[baseLocation][metric];
             const locationValue = cityData[location][metric];
             const percentDiff = ((locationValue - baseValue) / baseValue * 100).toFixed(0);
-            
+            console.log(percentDiff);
+            if(isNaN(percentDiff)){
+                return 'NaN';
+            }
             // Return with +/- sign
             const sign = percentDiff > 0 ? "+" : "-";
-            return `${sign}${sign} ${Math.abs(percentDiff)}%`;
+            return `${sign} ${Math.abs(percentDiff)}%`;
         }
     };
 
@@ -150,12 +142,12 @@ export default function CountryComparePage() {
         .filter(location => getCurrentData()[location])
         .map(location => ({
             name: location,
-            income: getCurrentData()[location]?.income || 0,
-            spending: getCurrentData()[location]?.spending || 0,
-            incomeDiff: calculateDifference(location, 'income'),
-            spendingDiff: calculateDifference(location, 'spending'),
-            isIncomePositive: isDifferencePositive(location, 'income'),
-            isSpendingPositive: isDifferencePositive(location, 'spending'),
+            income: getCurrentData()[location]?.Net_Salary || 0,
+            spending: getCurrentData()[location]?.Total_Expenses || 0,
+            incomeDiff: calculateDifference(location, 'Net_Salary'),
+            spendingDiff: calculateDifference(location, 'Total_Expenses'),
+            isIncomePositive: isDifferencePositive(location, 'Net_Salary'),
+            isSpendingPositive: isDifferencePositive(location, 'Total_Expenses'),
             pps: calculatePPS(location),
             country: levelType === 'city' ? cityData[location]?.country : location
         }))
@@ -165,15 +157,6 @@ export default function CountryComparePage() {
             const bvalue=b[sortOption];
             return bvalue-avalue;
         });
-
-    const countries = [
-        'Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola',
-        'Antigua and Barbuda', 'Argentina', 'Armenia', 'Australia',
-        'Austria', 'Belgium', 'Belize', 'Benin', 'Bhutan', 'Bolivia',
-        'Bosnia', 'Botswana', 'Brazil', 'Brunei', 'Bulgaria', 
-        'USA', 'Sweden', 'Japan'
-    ];
-
     const filteredLocations = getLocationsList().filter(location =>
         location.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -309,7 +292,7 @@ export default function CountryComparePage() {
                                             <Tooltip id={`income-tooltip-${index}`} place="top" content={`Income: ${location.income.toLocaleString()}`} />
                                             
                                             {/* Income value */}
-                                            <div className="absolute right-2 top-0 text-xs text-black font-bold">
+                                            <div className="absolute right-2 top-[-10px] text-xs text-black font-bold">
                                                 {location.income.toLocaleString()}
                                             </div>
                                             
@@ -364,7 +347,7 @@ export default function CountryComparePage() {
                 {/* Right Section - Location Selector & Settings */}
                 <div className="w-64">
                     {/* Currency Selector */}
-                    <div className="mb-4">
+                    {/*<div className="mb-4">
                         <div className="text-sm text-gray-400">Currency</div>
                         <div className="bg-gray-800 p-2 rounded flex justify-between items-center">
                             <div className="flex items-center">
@@ -373,7 +356,7 @@ export default function CountryComparePage() {
                             </div>
                             <ChevronDown size={16} />
                         </div>
-                    </div>
+                    </div>*/}
                     
                     {/* Level Type Selector */}
                     <div className="mb-4">
@@ -456,6 +439,15 @@ export default function CountryComparePage() {
                                 </div>
                             ))}
                         </div>
+                    </div>
+                    <div className="mt-10 p-4 text-center text-gray-400 text-sm">
+                        This chart compares the purchasing power and net salaries of different countries, highlighting the differences in income levels and cost of living. The initial income differences are measured relative to US(Country Level) and New York City(City Level). The PPI is computed as follows:
+                        <br />
+                        <strong>Ratio1=Net Salary in City or Country/Total Expenses in City or Country</strong>
+                        <br />
+                        <strong>Ratio2=Net Salary in New York City or Country/Total Expenses in New York City</strong>
+                        <br />
+                        <strong>PPS=Ratio1/Ratio2</strong>
                     </div>
                 </div>
             </div>
