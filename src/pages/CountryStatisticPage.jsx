@@ -217,15 +217,17 @@ export default function CountryStatisticPage() {
             </div>
             <div className="w-4/5 p-6">
                 <div className="flex items-center justify-between mb-6">
-                    <h1 className="text-5xl font-bold">{countryData.country_name}(2024)</h1>
-                    <h2 className="text-xl">
-                        Salary after tax (Country):{" "}
-                        {latestData.Net_Salary ?
-                            ( (latestData.Net_Salary * (currencies.find(currencyOption => currencyOption.code === currency)?.exchange_rate || 1))
-                                .toFixed(2) )
-                            : "N/A"}{" "}
-                        {currency}
-                    </h2>
+                    <h1 className="text-5xl font-bold">{countryData.country_name} (2024)</h1>
+                    {latestData.Net_Salary && (
+                        <h2 className="text-xl">
+                            Salary after tax (Country):{" "}
+                            {(
+                                latestData.Net_Salary *
+                                (currencies.find(currencyOption => currencyOption.code === currency)?.exchange_rate || 1)
+                            ).toFixed(2)}{" "}
+                            {currency}
+                        </h2>
+                    )}
                 </div>
                 <hr className="border-t border-white my-4" />
                 <div className={updatedBarData.length > 7 || updatedBarData.length === 0 ? "flex flex-col gap-6" : "grid grid-cols-2 gap-6"}>
