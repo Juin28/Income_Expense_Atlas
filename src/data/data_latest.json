@@ -523,7 +523,13 @@
         "restaurant_price_index": 34.5,
         "local_purchasing_power_index": 6.3
       },
-      "Total_Expenses": 0
+      "Clothing_And_Shoes": 327.19,
+      "Rent_Per_Month": 792.8100000000001,
+      "Restaurants": 74.82999999999997,
+      "Sports_And_Leisure": 95.86,
+      "Public_Transportation": 44.669999999999995,
+      "Utilities": 254.78,
+      "Total_Expenses": 1590.14
     },
     "cities": {
       "Abidjan": {
@@ -28085,20 +28091,6 @@
         }
       }
     }
-  },
-  "XXX_Ivory Coast": {
-    "country_name": "Ivory Coast",
-    "country_code": "XXX_Ivory Coast",
-    "country": {
-      "Clothing_And_Shoes": 327.19,
-      "Rent_Per_Month": 792.8100000000001,
-      "Restaurants": 74.82999999999997,
-      "Sports_And_Leisure": 95.86,
-      "Public_Transportation": 44.669999999999995,
-      "Utilities": 254.78,
-      "Total_Expenses": 1590.14
-    },
-    "cities": {}
   },
   "MDG": {
     "country_name": "Madagascar",
