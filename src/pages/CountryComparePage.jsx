@@ -22,11 +22,15 @@ export default function CountryComparePage() {
     const cityData = {
     };
     for (const [countryCode, countryInfo] of Object.entries(countriesData)) {
-        countryData[countryInfo.country_name] = { ...countryInfo.country };
-        countries.push(countryInfo.country_name)
-        if (countryInfo.cities) {
-            for (const [cityName, cityInfo] of Object.entries(countryInfo.cities)) {
-                cityData[cityName] = { ...cityInfo, country: countryCode };
+        if(countryInfo.country.Net_Salary!=null&&countryInfo.country.Total_Expenses!=null){
+            countries.push(countryInfo.country_name);
+            countryData[countryInfo.country_name] = { ...countryInfo.country };
+            if (countryInfo.cities) {
+                for (const [cityName, cityInfo] of Object.entries(countryInfo.cities)) {
+                    if(cityInfo.Net_Salary!=null&&cityInfo.Total_Expenses!=null){
+                        cityData[cityName] = { ...cityInfo, country: countryCode };
+                    }
+                }
             }
         }
     }
@@ -65,18 +69,18 @@ export default function CountryComparePage() {
             return Math.round(100 * incomeRatio);
         } else {
             // City level comparison
-            if (!baseLocation || !cityData[baseLocation] || !cityData[location]) return 0;
+            if (!currentData[location]) return 0;
             if (location === baseLocation) return 100; // Base location always has 100
             
             // Calculate based on income ratio between cities
-            const baseIncome = cityData[baseLocation].Net_Salary;
-            const locationIncome = cityData[location].Net_Salary;
+            const baseIncomeExpensesRatio = cityData[baseLocation].Net_Salary/cityData[baseLocation].Total_Expenses;
+            const locationIncomeExpensesRatio = cityData[location].Net_Salary/cityData[location].Total_Expenses;
             
             // Income ratio determines the base value
-            const incomeRatio = locationIncome / baseIncome;
+            const incomeRatio = locationIncomeExpensesRatio / baseIncomeExpensesRatio;
             
             // For cities, approximate the PPS based on income ratio
-            return Math.round(100 * incomeRatio + (Math.random() * 10));
+            return Math.round(100 * incomeRatio );
         }
     };
 
@@ -268,7 +272,7 @@ export default function CountryComparePage() {
                     </div>
 
                     {/* Chart with location data */}
-                    <div className="h-96 overflow-y-auto">
+                    <div className="h-220 overflow-y-auto">
                         {selectedCountries.length > 0 ? (
                             <>
                                 {displayData.map((location, index) => (
