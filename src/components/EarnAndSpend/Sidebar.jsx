@@ -51,17 +51,12 @@ export default function Sidebar(props) {
     );
 
     const fieldsOfSpending = [
-        // "General", // All
         "All",
-        // "Clothing & Shoes", // Clothings
         "Clothings",
         "Groceries",
-        // "Public Transport", // Transport
         "Transport",
         "Rent",
-        // "Restaurants", // Dine-out
         "Dine-out",
-        // "Sports & Leisure", // Leisure
         "Leisure",
         "Utilities",
     ];

@@ -11,9 +11,9 @@ export default function HeatmapBar(props) {
         minValue = 0;
         maxValue = 10000;
     } else if (activeTab === "spend") {
-        if (fieldOfSpending === "General") {
+        if (fieldOfSpending === "All") {
             minValue = 0;
-            maxValue = 150;
+            maxValue = 5000;
         } else if (fieldOfSpending === "Clothings") {
             minValue = 0;
             maxValue = 500;
