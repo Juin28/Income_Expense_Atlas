@@ -7,7 +7,7 @@ export default function Header() {
         <div className="bg-gray-800 p-4 flex justify-around">
             <Link
                 to="/DH2321_Project"
-                className={`text-gray-300 hover:text-white transition duration-300 ${location.pathname === "/DH2321_Project/" ? "font-bold text-white underline" : ""}`}
+                className={`text-gray-300 hover:text-white transition duration-300 ${location.pathname === "/DH2321_Project" ? "font-bold text-white underline" : ""}`}
             >
                 Earn & Spend Map
             </Link>
