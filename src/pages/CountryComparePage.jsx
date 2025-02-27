@@ -215,14 +215,14 @@ export default function CountryComparePage() {
                             )}
                         </div>
 
-                        <button className="flex items-center gap-2 bg-gray-800 px-4 py-2 rounded"
+                        <button className="relative flex items-center gap-2 bg-gray-800 px-4 py-2 rounded"
                         onClick={()=>setIsSortDropdownOpen(!isSortDropdownOpen)}>
                             <span>Sort</span>
                             <ArrowUpDown size={16} />
                         </button>
                         {/* Sorting DropDown */}
                         {isSortDropdownOpen && (
-                                <div className="absolute bg-gray-900 mt-2 rounded shadow-lg p-2 w-48 z-50">
+                                <div className="absolute bg-gray-900 mt-10 rounded shadow-lg p-2 w-48 z-50 left-45">
                                     <div 
                                         className="p-2 hover:bg-gray-700 cursor-pointer rounded"
                                         onClick={() => {
