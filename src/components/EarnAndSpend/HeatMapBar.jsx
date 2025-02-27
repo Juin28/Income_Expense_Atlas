@@ -14,22 +14,22 @@ export default function HeatmapBar(props) {
         if (fieldOfSpending === "General") {
             minValue = 0;
             maxValue = 150;
-        } else if (fieldOfSpending === "Clothing & Shoes") {
+        } else if (fieldOfSpending === "Clothings") {
             minValue = 0;
             maxValue = 500;
         } else if (fieldOfSpending === "Groceries") {
             minValue = 0;
             maxValue = 200;
-        } else if (fieldOfSpending === "Public Transport") {
+        } else if (fieldOfSpending === "Transport") {
             minValue = 0;
             maxValue = 125;
         } else if (fieldOfSpending === "Rent") {
             minValue = 0;
             maxValue = 4000;
-        } else if (fieldOfSpending === "Restaurants") {
+        } else if (fieldOfSpending === "Dine-out") {
             minValue = 0;
             maxValue = 200;
-        } else if (fieldOfSpending === "Sports & Leisure") {
+        } else if (fieldOfSpending === "Leisure") {
             minValue = 0;
             maxValue = 200;
         } else if (fieldOfSpending === "Utilities") {
@@ -50,7 +50,7 @@ export default function HeatmapBar(props) {
             <div className="flex flex-col justify-center align-middle w-1/6 mr-4">
                 <h2 className="text-white text-lg font-bold mr-2 w-full text-center">Average Monthly</h2>
                 <h2 className="text-white text-lg font-bold mr-2 w-full text-center">{activeTab === "earn" ? "Salary" : "Expenses"}</h2>
-                <span className="text-white text-md font-semibold text-center">{`(${fieldOfSpending})`}</span>
+                <span className="text-white text-md font-semibold text-center">{activeTab === "earn" ? "" :`(${fieldOfSpending})`}</span>
             </div>
 
             <div className="flex flex-col justify-center align-middle items-center w-full mt-3">
