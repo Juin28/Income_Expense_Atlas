@@ -4,17 +4,17 @@ export default function InformationPage() {
     return (
         <div className="bg-black text-white p-6">
             <div className="mx-10">
-                <h2 className="text-2xl font-bold text-center text-gray-200 mb-8">Quick Tips</h2>
-                <ul className="list-disc pl-5 mb-10">
-                    <li>...Step by step guide</li>
-                    {/* <li>Click on any country on the map view to enter a detailed view</li>
-                    <li>Use the time slider on the bottom to change the date of the data you are viewing</li>
-                    <li>Use the attribute menu on the right to select specific attributes to view</li>
-                    <li>In the detailed view use the attribute menu to view certain attributes in the x axis versus a constant y axis of CO2 emissions per capita</li>
-                    <li>You can select multiple countries (three at most) at once in the detailed view to compare, and also compare against global, OECD, EU27, and LCD data</li> */}
+                <h2 className="text-2xl font-bold text-center text-gray-200 mb-6">Quick Tips</h2>
+                <ul className="list-disc pl-5 mb-10 w-[65%] mx-auto">
+                    <li>Switch between the <strong>Earn</strong> and <strong>Spend</strong> tabs to visualize income data or expense data, respectively.</li>
+                    <li>Hover over any country on the map to display the country name along with its corresponding value.</li>
+                    <li>Utilize the field of spending menu located on the right to select a specific spending category.</li>
+                    <li>Click on any country in the map view to navigate to the detailed statistics page for that country.</li>
+                    <li>To compare different countries or cities, click the <strong>Compare</strong> button in the header to initiate the comparison.</li>
+                    <li>To visualize your living expenses budget for a specific country and make adjustments, navigate to the <strong>Budget Visualizer</strong>.</li>
                 </ul>
 
-                <h2 className="text-2xl font-bold text-center text-gray-200 mb-8">Walkthrough</h2>
+                <h2 className="text-2xl font-bold text-center text-gray-200 mb-6">Walkthrough</h2>
                 <div className="mb-10">
                     {/* <iframe
                     className="w-full h-64"
@@ -27,7 +27,7 @@ export default function InformationPage() {
                     <p>Walkthrough tutorial video</p>
                 </div>
 
-                <h2 className="text-2xl font-bold text-center text-gray-200 mb-8">Project Overview</h2>
+                <h2 className="text-2xl font-bold text-center text-gray-200 mb-6">Project Overview</h2>
                 <div className="mb-10 w-[85%] mx-auto">
                     <p className="mb-5">
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -42,7 +42,7 @@ export default function InformationPage() {
                     </p>
                 </div>
 
-                <h2 className="text-2xl font-bold text-center text-gray-200 mb-8">Meet Our Team</h2>
+                <h2 className="text-2xl font-bold text-center text-gray-200 mb-6">Meet Our Team</h2>
                 <div className="w-full mx-auto flex flex-wrap justify-center gap-8 mb-10">
                     {teamMembers.map((member, index) => (
                         <div
@@ -71,7 +71,7 @@ export default function InformationPage() {
                     ))}
                 </div>
 
-                <h2 className="text-2xl font-bold text-center text-gray-200 mb-8">Our Learning Objectives</h2>
+                <h2 className="text-2xl font-bold text-center text-gray-200 mb-6">Our Learning Objectives</h2>
                 <div className="mb-10 w-[85%] mx-auto">
                     <p className="mb-4">
                         In our group project, we developed an interactive visualization that empowers users to manipulate views and uncover relationships within selected datasets.
@@ -114,34 +114,9 @@ export default function InformationPage() {
                     </ol>
                 </div>
 
-                <h2 className="text-2xl font-bold text-center text-gray-200 mb-8">References</h2>
-                <div className="mb-5 w-[85%] mx-auto">
-                    <h3 className="font-semibold text-xl mb-2">Data Sources</h3>
-                    <ol className="list-decimal list-inside text-gray-200">
-                        <li>
-                            <strong>Numbeo</strong>
-                            <ul className="list-disc ml-4  text-sm">
-                                <li className="my-1 ml-4">Clothing and Shoes Expenses</li>
-                                <li className="my-1 ml-4">Groceries Expenses</li>
-                                <li className="my-1 ml-4">Net Salary</li>
-                                <li className="my-1 ml-4">Public Transportation Expenses</li>
-                                <li className="my-1 ml-4">Rent Per Month</li>
-                                <li className="my-1 ml-4">Restaurants Expenses</li>
-                                <li className="my-1 ml-4">Sports and Leisure Expenses</li>
-                                <li className="my-1 ml-4">Utilities Expenses</li>
-                            </ul>
-                        </li>
-                        <li>
-                            <strong>XE</strong>
-                            <ul className="list-disc ml-4  text-sm">
-                                <li className="my-1 ml-4">Curreny Exchange Rates</li>
-                            </ul>
-                        </li>
-                    </ol>
-                </div>
-                <div className="mb-5 w-[85%] mx-auto">
-                    <h3 className="font-semibold text-xl mb-2">Methodology</h3>
-                    <ol className="list-decimal list-inside text-gray-200">
+                <h2 className="text-2xl font-bold text-center text-gray-200 mb-6">Methodology</h2>
+                <div className="mb-10 w-[85%] mx-auto">
+                <ol className="list-decimal list-inside text-gray-200">
                         <li>
                             <strong>Clothing And Shoes Expenses</strong>
                             <ul className="list-disc ml-4 text-sm">
@@ -218,6 +193,32 @@ export default function InformationPage() {
                             <strong>Local Purchasing Power</strong>
                             <ul className="list-disc ml-4 text-sm">
                                 <li className="my-1 ml-4">This index indicates the relative purchasing power in a given city based on the average net salary. A local purchasing power of 40 means that residents with an average salary can afford, on average, 60% fewer goods and services compared to residents of New York City with an average salary.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+
+                <h2 className="text-2xl font-bold text-center text-gray-200 mb-6">References</h2>
+                <div className="mb-5 w-[85%] mx-auto">
+                    <h3 className="font-semibold text-xl mb-2">Data Sources</h3>
+                    <ol className="list-decimal list-inside text-gray-200">
+                        <li>
+                            <strong>Numbeo</strong>
+                            <ul className="list-disc ml-4  text-sm">
+                                <li className="my-1 ml-4">Clothing and Shoes Expenses</li>
+                                <li className="my-1 ml-4">Groceries Expenses</li>
+                                <li className="my-1 ml-4">Net Salary</li>
+                                <li className="my-1 ml-4">Public Transportation Expenses</li>
+                                <li className="my-1 ml-4">Rent Per Month</li>
+                                <li className="my-1 ml-4">Restaurants Expenses</li>
+                                <li className="my-1 ml-4">Sports and Leisure Expenses</li>
+                                <li className="my-1 ml-4">Utilities Expenses</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>XE</strong>
+                            <ul className="list-disc ml-4  text-sm">
+                                <li className="my-1 ml-4">Curreny Exchange Rates</li>
                             </ul>
                         </li>
                     </ol>
