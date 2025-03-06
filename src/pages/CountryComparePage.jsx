@@ -1,10 +1,22 @@
 import React, { useState } from "react";
 import { ChevronDown, ArrowUpDown, Minus } from 'lucide-react';
 import { Tooltip } from "react-tooltip";
-// import countriesData from "C:\\Users\\User\\DH2321_Project\\src\\data\\data_latest.json"
-import countriesData from "../data/data_latest.json"
+import countriesData from "../data/data_latest.json";
 import { BlockMath } from 'react-katex';
 import 'katex/dist/katex.min.css';
+import currencyData from "../data/currencies_data.json";
+import { 
+    BarChart, 
+    Bar, 
+    LineChart,
+    Line,
+    XAxis, 
+    YAxis, 
+    CartesianGrid, 
+    ResponsiveContainer,
+    Legend, 
+    Tooltip as RechartsTooltip
+} from 'recharts';
 
 export default function CountryComparePage() {
     const [selectedCountries, setSelectedCountries] = useState([]);
@@ -15,11 +27,29 @@ export default function CountryComparePage() {
     const [sortOption, setSortOption] = useState(false);
     const [levelType, setLevelType] = useState('country'); // 'country' or 'city'
     const [isLevelDropdownOpen, setIsLevelDropdownOpen] = useState(false);
+    // Improved currency state
+    const [selectedCurrency, setSelectedCurrency] = useState('USD');
+    const [isCurrencyDropdownOpen, setIsCurrencyDropdownOpen] = useState(false);
 
     // Country-level data
     const countryData = {};
     const countries = [];
-
+    
+    // Setup currency conversion rates
+    const conversionRates = {};
+    const currenciesList = [];
+    
+    // Process currency data
+    for(const currency of currencyData){
+      conversionRates[currency.code] = currency.exchange_rate;
+      currenciesList.push({
+        code: currency.code,
+        name: currency.name,
+        flag: currency.flag,
+        exchange_rate: currency.exchange_rate
+      });
+    }
+    
     // City-level data
     const cityData = {};
     for (const [countryCode, countryInfo] of Object.entries(countriesData)) {
@@ -35,7 +65,6 @@ export default function CountryComparePage() {
             }
         }
     }
-    // console.log(countryData);
 
     // Get the current data set based on level type
     const getCurrentData = () => {
@@ -49,6 +78,39 @@ export default function CountryComparePage() {
         } else {
             return Object.keys(cityData);
         }
+    };
+
+    // Convert currency value
+    const convertCurrency = (value) => {
+        // Assuming all values in the data are in USD
+        if (selectedCurrency === 'USD') return value;
+        
+        // Get the conversion rate for the selected currency
+        const rate = conversionRates[selectedCurrency] || 1;
+        return value * rate;
+    };
+
+    // Get currency symbol
+    const getCurrencySymbol = () => {
+        const currency = currenciesList.find(c => c.code === selectedCurrency);
+        return currency ? currency.code : 'USD';
+    };
+
+    // Get currency flag
+    const getCurrencyFlag = () => {
+        const currency = currenciesList.find(c => c.code === selectedCurrency);
+        return currency ? currency.flag : '🇺🇸';
+    };
+
+    // Format currency value with proper symbol
+    const formatCurrency = (value) => {
+        if (!value && value !== 0) return '--';
+        
+        // Round to 2 decimal places
+        const roundedValue = Math.round(value * 100) / 100;
+        
+        // Format with thousands separators
+        return roundedValue.toLocaleString();
     };
 
     // Calculate PPS (Purchasing Power Score)
@@ -94,15 +156,14 @@ export default function CountryComparePage() {
             if (location === baseLocation) return "0%";
 
             const baseValue = countryData[baseLocation][metric];
-            console.log(countryData[baseLocation]);
             const locationValue = countryData[location][metric];
             const percentDiff = ((locationValue - baseValue) / baseValue * 100).toFixed(0);
             if (isNaN(percentDiff)) {
                 return 'NaN';
             }
             // Return with +/- sign
-            const sign = percentDiff > 0 ? "+" : "-";
-            return `${sign} ${Math.abs(percentDiff)}%`;
+            const sign = percentDiff > 0 ? "+" : "";
+            return `${sign}${percentDiff}%`;
         } else {
             // City level comparison
             if (location === baseLocation) return "0%";
@@ -110,13 +171,12 @@ export default function CountryComparePage() {
             const baseValue = cityData[baseLocation][metric];
             const locationValue = cityData[location][metric];
             const percentDiff = ((locationValue - baseValue) / baseValue * 100).toFixed(0);
-            console.log(percentDiff);
             if (isNaN(percentDiff)) {
                 return 'NaN';
             }
             // Return with +/- sign
-            const sign = percentDiff > 0 ? "+" : "-";
-            return `${sign} ${Math.abs(percentDiff)}%`;
+            const sign = percentDiff > 0 ? "+" : "";
+            return `${sign}${percentDiff}%`;
         }
     };
 
@@ -163,11 +223,30 @@ export default function CountryComparePage() {
             return bvalue - avalue;
         });
 
+    // Prepare data for Recharts components with converted currency values
+    const prepareBarChartData = () => {
+        return displayData.map(location => ({
+            name: location.name,
+            income: convertCurrency(location.income),
+            spending: convertCurrency(location.spending)
+        }));
+    };
+
+    const preparePPSChartData = () => {
+        return [{
+            name: 'Purchasing Power Score',
+            data: displayData.map(location => ({
+                name: location.name,
+                pps: location.pps
+            }))
+        }];
+    };
+
     const filteredLocations = getLocationsList()
-    .filter(location =>
-        location.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-    .sort((a, b) => a.localeCompare(b));
+        .filter(location =>
+            location.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+        .sort((a, b) => a.localeCompare(b));
 
     // Handle level type change
     const handleLevelChange = (newLevel) => {
@@ -176,21 +255,53 @@ export default function CountryComparePage() {
         setSelectedCountries([]);
         // Reset base location appropriately
         if (newLevel === 'country') {
-            setBaseLocation('USA');
+            setBaseLocation('United States');
         } else {
             setBaseLocation('New York');
         }
         setIsLevelDropdownOpen(false);
     };
 
+    // Custom tooltip for recharts
+    const CustomBarTooltip = ({ active, payload, label }) => {
+        if (active && payload && payload.length) {
+            return (
+                <div className="bg-gray-800 p-3 rounded shadow-lg border border-gray-700">
+                    <p className="font-medium mb-1">{label}</p>
+                    {payload.map((item, index) => (
+                        <p key={index} className="text-sm" style={{ color: item.color }}>
+                            {item.name}: {getCurrencySymbol()} {formatCurrency(item.value)}
+                        </p>
+                    ))}
+                </div>
+            );
+        }
+        return null;
+    };
+
+    const CustomPPSTooltip = ({ active, payload, label }) => {
+        if (active && payload && payload.length) {
+            return (
+                <div className="bg-gray-800 p-3 rounded shadow-lg border border-gray-700">
+                    <p className="font-medium mb-1">{label}</p>
+                    {payload.map((item, index) => (
+                        <p key={index} className="text-sm" style={{ color: item.color }}>
+                            {item.name}: {item.value}
+                        </p>
+                    ))}
+                </div>
+            );
+        }
+        return null;
+    };
+
     return (
         <div className="min-h-screen bg-black text-white p-4">
-
             <div className="flex gap-8">
-                {/* Left Section - Chart */}
+                {/* Left Section - Charts */}
                 <div className="flex-1">
                     {/* Controls */}
-                    <div className="flex gap-4 mb-8">
+                    <div className="flex gap-4 mb-8 flex-wrap">
                         <div className="relative">
                             <button
                                 className="flex items-center bg-gray-800 gap-2 px-4 py-2 rounded"
@@ -219,43 +330,74 @@ export default function CountryComparePage() {
                             )}
                         </div>
 
+                        {/* Improved Currency Selector */}
+                        <div className="relative">
+                            <button
+                                className="flex items-center bg-gray-800 gap-2 px-4 py-2 rounded"
+                                onClick={() => setIsCurrencyDropdownOpen(!isCurrencyDropdownOpen)}
+                            >
+                                <span>{selectedCurrency}</span>
+                                <ChevronDown size={16} />
+                            </button>
+
+                            {/* Currency Dropdown */}
+                            {isCurrencyDropdownOpen && (
+                                <div className="absolute bg-gray-900 mt-2 rounded shadow-lg p-2 w-64 z-50 max-h-64 overflow-y-auto">
+                                    {currenciesList.map(currency => (
+                                        <div
+                                            key={currency.code}
+                                            className="p-2 hover:bg-gray-700 cursor-pointer rounded flex items-center"
+                                            onClick={() => {
+                                                setSelectedCurrency(currency.code);
+                                                setIsCurrencyDropdownOpen(false);
+                                            }}
+                                        >
+                                            <span className="font-medium mr-2">{currency.code}</span>
+                                            <span className="text-gray-400 text-sm">{currency.name}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
                         <button className="relative flex items-center gap-2 bg-gray-800 px-4 py-2 rounded"
                         onClick={()=>setIsSortDropdownOpen(!isSortDropdownOpen)}>
                             <span>Sort</span>
                             <ArrowUpDown size={16} />
                         </button>
+                        
                         {/* Sorting DropDown */}
                         {isSortDropdownOpen && (
-                                <div className="absolute bg-gray-900 mt-10 rounded shadow-lg p-2 w-48 z-50 left-45">
-                                    <div 
-                                        className="p-2 hover:bg-gray-700 cursor-pointer rounded"
-                                        onClick={() => {
-                                            setSortOption('income');
-                                            setIsSortDropdownOpen(false);
-                                        }}
-                                    >
-                                        Income
-                                    </div>
-                                    <div 
-                                        className="p-2 hover:bg-gray-700 cursor-pointer rounded"
-                                        onClick={() => {
-                                            setSortOption('spending');
-                                            setIsSortDropdownOpen(false);
-                                        }}
-                                    >
-                                        Spending
-                                    </div>
-                                    <div 
-                                        className="p-2 hover:bg-gray-700 cursor-pointer rounded"
-                                        onClick={() => {
-                                            setSortOption('pps');
-                                            setIsSortDropdownOpen(false);
-                                        }}
-                                    >
-                                        Purchasing Power Score
-                                    </div>
+                            <div className="absolute bg-gray-900 mt-10 rounded shadow-lg p-2 w-48 z-50 left-45">
+                                <div 
+                                    className="p-2 hover:bg-gray-700 cursor-pointer rounded"
+                                    onClick={() => {
+                                        setSortOption('income');
+                                        setIsSortDropdownOpen(false);
+                                    }}
+                                >
+                                    Income
                                 </div>
-                            )}
+                                <div 
+                                    className="p-2 hover:bg-gray-700 cursor-pointer rounded"
+                                    onClick={() => {
+                                        setSortOption('spending');
+                                        setIsSortDropdownOpen(false);
+                                    }}
+                                >
+                                    Spending
+                                </div>
+                                <div 
+                                    className="p-2 hover:bg-gray-700 cursor-pointer rounded"
+                                    onClick={() => {
+                                        setSortOption('pps');
+                                        setIsSortDropdownOpen(false);
+                                    }}
+                                >
+                                    Purchasing Power Score
+                                </div>
+                            </div>
+                        )}
                         
                         <div className="flex items-center ml-4">
                             <div className="w-4 h-4 bg-green-400 mr-2"></div>
@@ -267,105 +409,116 @@ export default function CountryComparePage() {
                         </div>
                     </div>
 
-                    {/* Header for the chart section */}
-                    <div className="flex mb-2 px-4">
-                        <div className="w-32"></div> {/* Space for location names */}
-                        <div className="flex-1"></div> {/* Space for bars */}
-                        <div className="w-32 text-center">%Difference</div>
-                        <div className="w-32 text-center">Purchasing<br />Power<br />Score</div>
-                    </div>
-
-                    {/* Chart with location data */}
-                    <div className="h-220 overflow-y-auto">
-                        {selectedCountries.length > 0 ? (
-                            <>
-                                {displayData.map((location, index) => (
-                                    <div key={index} className="flex items-center mb-8">
-                                        {/* Location name */}
-                                        <div className="w-32 font-medium">
-                                            {location.name}
-                                            {levelType === 'city' && (
-                                                <div className="text-xs text-gray-400">{location.country}</div>
-                                            )}
-                                        </div>
-
-                                        {/* Bar chart section */}
-                                        <div className="flex-1 relative">
-                                            {/* Income bar */}
-                                            <div
-                                                className="h-6 bg-green-400 absolute"
-                                                style={{ width: `${(location.income / 8000) * 100}%` }}
-                                                data-tooltip-id={`income-tooltip-${index}`}
-                                            ></div>
-                                            <Tooltip id={`income-tooltip-${index}`} place="top" content={`Income: ${location.income.toLocaleString()}`} />
-
-                                            {/* Income value */}
-                                            <div className="absolute right-2 top-[-10px] text-xs text-black font-bold">
-                                                {location.income.toLocaleString()}
-                                            </div>
-
-                                            {/* Spending bar */}
-                                            <div
-                                                className="h-6 bg-pink-400 absolute mt-8"
-                                                style={{ width: `${(location.spending / 8000) * 100}%` }}
-                                                data-tooltip-id={`spending-tooltip-${index}`}
-                                            ></div>
-                                            <Tooltip id={`spending-tooltip-${index}`} place="top" content={`Spending: ${location.spending.toLocaleString()}`} />
-
-                                            {/* Spending value */}
-                                            <div className="absolute right-2 top-8 text-xs text-black font-bold">
-                                                {location.spending.toLocaleString()}
-                                            </div>
-                                        </div>
-
-                                        {/* Percentage difference column - only show if not base location */}
-                                        <div className="w-32 text-center">
-                                            {location.name !== baseLocation ? (
-                                                <>
-                                                    <div className={location.isIncomePositive ? "text-green-400" : "text-red-500"}>
-                                                        {location.incomeDiff}
-                                                    </div>
-                                                    <div className={location.isSpendingPositive ? "text-green-400" : "text-red-500"}>
-                                                        {location.spendingDiff}
-                                                    </div>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <div className="text-green-400">++ 0%</div>
-                                                    <div className="text-green-400">++ 0%</div>
-                                                </>
-                                            )}
-                                        </div>
-
-                                        {/* Purchasing Power Score */}
-                                        <div className="w-32 text-center">
-                                            <div className="font-bold text-xl">{location.pps}</div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </>
-                        ) : (
-                            <div className="h-full flex items-center justify-center text-gray-500">
-                                Select {levelType === 'country' ? 'Countries' : 'Cities'} on the right bar to start...
+                    {/* Chart Section */}
+                    {selectedCountries.length > 0 ? (
+                        <div className="space-y-8">
+                            {/* Income/Expense Bar Chart */}
+                            <div className="bg-gray-900 p-4 rounded">
+                                <h3 className="text-lg font-medium mb-4">
+                                    Income vs. Expenses Comparison ( {getCurrencySymbol()})
+                                </h3>
+                                <div className="h-64">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <BarChart
+                                            data={prepareBarChartData()}
+                                            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                                        >
+                                            <CartesianGrid strokeDasharray="3 3" stroke="#444" />
+                                            <XAxis dataKey="name" stroke="#fff" />
+                                            <YAxis stroke="#fff" />
+                                            <RechartsTooltip content={<CustomBarTooltip />} />
+                                            <Legend />
+                                            <Bar dataKey="income" name="Income" fill="#4ade80" />
+                                            <Bar dataKey="spending" name="Spending" fill="#f472b6" />
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </div>
                             </div>
-                        )}
-                    </div>
+
+                            {/* Purchasing Power Score Chart */}
+                            <div className="bg-gray-900 p-4 rounded">
+                                <h3 className="text-lg font-medium mb-4">Purchasing Power Score Comparison</h3>
+                                <div className="h-64">
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <LineChart margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                                            <CartesianGrid strokeDasharray="3 3" stroke="#444" />
+                                            <XAxis 
+                                                dataKey="name" 
+                                                type="category" 
+                                                allowDuplicatedCategory={false}
+                                                stroke="#fff" 
+                                            />
+                                            <YAxis stroke="#fff" domain={[0, 'dataMax + 20']} />
+                                            <RechartsTooltip content={<CustomPPSTooltip />} />
+                                            <Legend />
+                                            {preparePPSChartData().map((s) => (
+                                                <Line 
+                                                    key={s.name}
+                                                    dataKey="pps"
+                                                    data={s.data}
+                                                    name={s.name}
+                                                    stroke="#3b82f6"
+                                                    strokeWidth={2}
+                                                    dot={{ r: 6, fill: '#3b82f6' }}
+                                                    activeDot={{ r: 8 }}
+                                                />
+                                            ))}
+                                        </LineChart>
+                                    </ResponsiveContainer>
+                                </div>
+                            </div>
+
+                            {/* Detailed Comparison Table */}
+                            <div className="bg-gray-900 p-4 rounded overflow-x-auto">
+                                <h3 className="text-lg font-medium mb-4">Detailed Comparison</h3>
+                                <table className="min-w-full divide-y divide-gray-700">
+                                    <thead>
+                                        <tr>
+                                            <th className="px-4 py-2 text-left">Location</th>
+                                            <th className="px-4 py-2 text-right">Income ( {getCurrencySymbol()})</th>
+                                            <th className="px-4 py-2 text-right">Income Diff</th>
+                                            <th className="px-4 py-2 text-right">Spending ( {getCurrencySymbol()})</th>
+                                            <th className="px-4 py-2 text-right">Spending Diff</th>
+                                            <th className="px-4 py-2 text-right">PPS</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {displayData.map((location, index) => (
+                                            <tr key={index} className={index % 2 === 0 ? 'bg-gray-800' : ''}>
+                                                <td className="px-4 py-2">
+                                                    {location.name}
+                                                    {levelType === 'city' && (
+                                                        <div className="text-xs text-gray-400">{location.country}</div>
+                                                    )}
+                                                </td>
+                                                <td className="px-4 py-2 text-right">
+                                                    {formatCurrency(convertCurrency(location.income))}
+                                                </td>
+                                                <td className={`px-4 py-2 text-right ${location.isIncomePositive ? 'text-green-400' : 'text-red-500'}`}>
+                                                    {location.incomeDiff}
+                                                </td>
+                                                <td className="px-4 py-2 text-right">
+                                                    {formatCurrency(convertCurrency(location.spending))}
+                                                </td>
+                                                <td className={`px-4 py-2 text-right ${location.isSpendingPositive ? 'text-red-500' : 'text-green-400'}`}>
+                                                    {location.spendingDiff}
+                                                </td>
+                                                <td className="px-4 py-2 text-right font-bold">{location.pps}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="h-64 flex items-center justify-center text-gray-500">
+                            Select {levelType === 'country' ? 'Countries' : 'Cities'} on the right bar to start...
+                        </div>
+                    )}
                 </div>
 
                 {/* Right Section - Location Selector & Settings */}
                 <div className="w-84">
-                    {/* Currency Selector */}
-                    {/*<div className="mb-4">
-                        <div className="text-sm text-gray-400">Currency</div>
-                        <div className="bg-gray-800 p-2 rounded flex justify-between items-center">
-                            <div className="flex items-center">
-                                <span className="mr-2">🇺🇸</span>
-                                <span>USD</span>
-                            </div>
-                            <ChevronDown size={16} />
-                        </div>
-                    </div>*/}
-
                     {/* Level Type Selector */}
                     <div className="mb-4">
                         <div className="text-sm text-gray-400">Data Level</div>
@@ -448,6 +601,8 @@ export default function CountryComparePage() {
                             ))}
                         </div>
                     </div>
+                    
+                    {/* Formula Explanation */}
                     <div className="mt-10 p-4 text-center text-gray-400 text-sm">
                         This chart compares the purchasing power and net salaries of different countries, highlighting the differences in income levels and cost of living. The initial income differences are measured relative to US(Country Level) and New York City(City Level). The PPI is computed as follows:
                         <div className="mt-5 text-center">
