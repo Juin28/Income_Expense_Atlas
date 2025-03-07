@@ -11,6 +11,7 @@ const BudgetVisualiserPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isBudgetWarning, setIsBudgetWarning] = useState(false);
   const [savings, setSavings] = useState(0);
+  const [isCountryChanging, setIsCountryChanging] = useState(false);
 
   // Map API data keys to display names
   const categoryMapping = {
@@ -27,7 +28,7 @@ const BudgetVisualiserPage = () => {
   const categoryMaxValues = {
     'Groceries': 400,
     'Clothing': 500,
-    'Rent': 1200, 
+    'Rent': 5000, 
     'Dine-out': 200,
     'Leisure': 300,
     'Transport': 200,
@@ -62,95 +63,71 @@ const BudgetVisualiserPage = () => {
     });
   }
 
-  // Simulate loading country-specific data
+  // Get all country names from the imported data
+  const getCountriesFromData = () => {
+    const countries = [];
+    for (const countryCode in countriesData) {
+      if (countriesData[countryCode].country_name) {
+        countries.push(countriesData[countryCode].country_name);
+      }
+    }
+    return countries;
+  };
+
+  // Get country data by name
+  const getCountryDataByName = (countryName) => {
+    for (const countryCode in countriesData) {
+      if (countriesData[countryCode].country_name === countryName) {
+        return countriesData[countryCode].country;
+      }
+    }
+    return null;
+  };
+
+  // Set initial data when component mounts
   useEffect(() => {
-    // Sample dataset for demonstration - in production, this would come from countriesData
-    const mockCountryData = {
-      'Japan': {
-        'Markets': 73.36,
-        'Clothing_And_Shoes': 279.59,
-        'Rent_Per_Month': 399.66,
-        'Restaurants': 73.28,
-        'Sports_And_Leisure': 97.54,
-        'Public_Transportation': 28.98,
-        'Utilities': 145.66,
-        'Net_Salary': 646.31,
-        'Total_Expenses': 1098.07
-      }
-    };
-    
-    // Add variations for other countries (just for demo purposes)
-    countries.forEach(country => {
-      if (country !== 'Japan') {
-        const multiplier = 0.8 + (country.charCodeAt(0) % 15) / 10; // Creates a range between 0.8 and 2.3
-        
-        mockCountryData[country] = {
-          'Markets': mockCountryData['Japan']['Markets'] * multiplier,
-          'Clothing_And_Shoes': mockCountryData['Japan']['Clothing_And_Shoes'] * multiplier,
-          'Rent_Per_Month': mockCountryData['Japan']['Rent_Per_Month'] * multiplier,
-          'Restaurants': mockCountryData['Japan']['Restaurants'] * multiplier,
-          'Sports_And_Leisure': mockCountryData['Japan']['Sports_And_Leisure'] * multiplier,
-          'Public_Transportation': mockCountryData['Japan']['Public_Transportation'] * multiplier,
-          'Utilities': mockCountryData['Japan']['Utilities'] * multiplier,
-          'Total_Expenses': mockCountryData['Japan']['Total_Expenses'] * multiplier
-        };
-      }
-    });
-    
-    // Update categories based on selected country data
-    updateCategoriesFromCountryData(mockCountryData[selectedCountry]);
-    
-    // Set initial budget to match recommended budget for selected country
-    setTotalBudget(Math.round(mockCountryData[selectedCountry]['Total_Expenses']));
+    // Load data for initial country
+    const initialCountryData = getCountryDataByName(selectedCountry);
+    if (initialCountryData) {
+      const newCategories = updateCategoriesFromCountryData(initialCountryData);
+      const newBudget = Math.round(initialCountryData['Total_Expenses'] || 1600);
+      setTotalBudget(newBudget);
+      
+      // Calculate initial savings after categories are updated
+      setTimeout(() => {
+        const totalExpenses = calculateTotalExpensesFromCategories(newCategories);
+        setSavings(Math.max(0, newBudget - totalExpenses));
+        setIsCountryChanging(false);
+      }, 0);
+    }
   }, []);
 
   // Update categories when country changes
   useEffect(() => {
-    // In a real implementation, this would fetch data for the selected country
-    // For demo, we'll just simulate this by reloading the mock data
-    const mockCountryData = {
-      'Japan': {
-        'Markets': 73.36,
-        'Clothing_And_Shoes': 279.59,
-        'Rent_Per_Month': 399.66,
-        'Restaurants': 73.28,
-        'Sports_And_Leisure': 97.54,
-        'Public_Transportation': 28.98,
-        'Utilities': 145.66,
-        'Net_Salary': 646.31,
-        'Total_Expenses': 1098.07
-      }
-    };
-    
-    // Add variations for other countries (for demo)
-    countries.forEach(country => {
-      if (country !== 'Japan') {
-        const multiplier = 0.8 + (country.charCodeAt(0) % 15) / 10;
-        
-        mockCountryData[country] = {
-          'Markets': mockCountryData['Japan']['Markets'] * multiplier,
-          'Clothing_And_Shoes': mockCountryData['Japan']['Clothing_And_Shoes'] * multiplier,
-          'Rent_Per_Month': mockCountryData['Japan']['Rent_Per_Month'] * multiplier,
-          'Restaurants': mockCountryData['Japan']['Restaurants'] * multiplier,
-          'Sports_And_Leisure': mockCountryData['Japan']['Sports_And_Leisure'] * multiplier,
-          'Public_Transportation': mockCountryData['Japan']['Public_Transportation'] * multiplier,
-          'Utilities': mockCountryData['Japan']['Utilities'] * multiplier,
-          'Total_Expenses': mockCountryData['Japan']['Total_Expenses'] * multiplier
-        };
-      }
-    });
-    
-    // Update categories if data exists
-    if (mockCountryData[selectedCountry]) {
-      updateCategoriesFromCountryData(mockCountryData[selectedCountry]);
-      // Update budget to match recommended for the country
-      setTotalBudget(Math.round(mockCountryData[selectedCountry]['Total_Expenses']));
+    setIsCountryChanging(true);
+    const countryData = getCountryDataByName(selectedCountry);
+    if (countryData) {
+      const newCategories = updateCategoriesFromCountryData(countryData);
+      const newBudget = Math.round(countryData['Total_Expenses'] || 1600);
+      setTotalBudget(newBudget);
+      
+      // Calculate new savings after categories are updated
+      setTimeout(() => {
+        const totalExpenses = calculateTotalExpensesFromCategories(newCategories);
+        setSavings(Math.max(0, newBudget - totalExpenses));
+        setIsCountryChanging(false);
+      }, 0);
     }
   }, [selectedCountry]);
 
+  // Helper function to calculate expenses from a categories object
+  const calculateTotalExpensesFromCategories = (categoriesObj) => {
+    return Object.values(categoriesObj).reduce((sum, cat) => sum + cat.value, 0);
+  };
+
   // Update categories from country data
   const updateCategoriesFromCountryData = (countryData) => {
-    if (!countryData) return;
+    if (!countryData) return {};
     
     const newCategories = {};
     
@@ -166,6 +143,7 @@ const BudgetVisualiserPage = () => {
     }
     
     setCategories(newCategories);
+    return newCategories; // Return the new categories for immediate use
   };
 
   // Calculate total expenses across all categories
@@ -201,6 +179,8 @@ const BudgetVisualiserPage = () => {
 
   // Update savings and budget warning when categories or total budget changes
   useEffect(() => {
+    if (isCountryChanging) return; // Skip this update during country change
+    
     const totalExpenses = calculateTotalExpenses();
     const newSavings = Math.max(0, totalBudget - totalExpenses);
     
@@ -221,13 +201,26 @@ const BudgetVisualiserPage = () => {
       
       setCategories(adjustedCategories);
     }
-  }, [totalBudget]);
+  }, [totalBudget, categories, isCountryChanging]);
 
   // Handle category value changes
   const handleCategoryChange = (category, newValue) => {
     const parsedNewValue = parseFloat(newValue);
     
     if (isNaN(parsedNewValue)) return;
+    
+    // Skip checks during country change
+    if (isCountryChanging) {
+      const updatedCategories = {
+        ...categories,
+        [category]: {
+          ...categories[category],
+          value: parsedNewValue
+        }
+      };
+      setCategories(updatedCategories);
+      return;
+    }
     
     // If savings is 0, we need to enforce the constraint that
     // increasing one category must decrease others proportionally
@@ -330,13 +323,8 @@ const BudgetVisualiserPage = () => {
     return colorMap[category] || '#8884d8';
   };
 
-  // List of countries for selection
-  const countries = [
-    'Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola',
-    'Antigua and Barbuda', 'Argentina', 'Armenia', 'Australia',
-    'Austria', 'Belgium', 'Belize', 'Benin', 'Bhutan', 'Bolivia',
-    'Bosnia', 'Botswana', 'Brazil', 'Japan'
-  ];
+  // List of countries from data
+  const countries = getCountriesFromData();
 
   // Filter countries based on search term
   const filteredCountries = countries.filter(country =>
@@ -401,9 +389,14 @@ const BudgetVisualiserPage = () => {
         {/* Left Section: Slider and Budget Adjustments */}
         <div className="w-1/4 bg-gray-800 p-6 border-r border-gray-700">
           <h2 className="text-2xl font-bold text-white mb-4">Adjust Categories</h2>
+          {isCountryChanging && (
+            <div className="mb-4 p-2 bg-blue-600 text-white rounded">
+              Loading country data...
+            </div>
+          )}
           {Object.entries(categories).map(([category, { value, max, average }]) => {
             // Calculate dynamic max value based on current savings
-            const effectiveMax = savings <= 0 
+            const effectiveMax = savings <= 0 && !isCountryChanging
               ? value  // If no savings, can't increase
               : Math.min(max, value + savings);  // Can increase up to value + savings
               
@@ -428,7 +421,7 @@ const BudgetVisualiserPage = () => {
                     ></div>
                     
                     {/* Maximum allowed area indicator when savings is 0 */}
-                    {savings <= 0 && (
+                    {savings <= 0 && !isCountryChanging && (
                       <div 
                         className="absolute top-0 right-0 h-full bg-gray-800 rounded-r-lg" 
                         style={{ 
@@ -468,10 +461,8 @@ const BudgetVisualiserPage = () => {
                     step="0.01"
                     value={value}
                     onChange={(e) => handleCategoryChange(category, e.target.value)}
-                    className={`absolute top-0 left-0 w-full opacity-0 cursor-pointer h-6 z-10 ${savings <= 0 && value >= effectiveMax ? 'cursor-not-allowed' : ''}`}
-                    style={{ 
-                      pointerEvents: savings <= 0 && value >= effectiveMax ? 'none' : 'auto'
-                    }}
+                    className="absolute top-0 left-0 w-full opacity-0 cursor-pointer h-6 z-10"
+                    // Always allow input during country change regardless of savings
                   />
                 </div>
                 
@@ -550,8 +541,11 @@ const BudgetVisualiserPage = () => {
                   {savings.toFixed(2)} {currency}
                 </span>
               </div>
-              {savings <= 0 && (
+              {savings <= 0 && !isCountryChanging && (
                 <p className="text-xs text-gray-400 mt-1">No savings available. You can't increase category values.</p>
+              )}
+              {isCountryChanging && (
+                <p className="text-xs text-blue-400 mt-1">Updating country data...</p>
               )}
             </div>
           </div>
