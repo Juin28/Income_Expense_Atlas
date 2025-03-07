@@ -282,7 +282,16 @@ const EarnAndSpendPage = () => {
                                 {allData[hoveredCountry]?.country_name || hoveredCountry}
                             </div>
                             <div className="text-sm">
-                                ${activeTab === "earn" ? (countrySalaries[hoveredCountry] || 0).toFixed(2) : (countryExpenses[hoveredCountry]?.Total_Expenses || 0).toFixed(2)}
+                                ${activeTab === "earn" ? (countrySalaries[hoveredCountry] || 0).toFixed(2) : 
+                                    fieldOfSpending === "All" ? (countryExpenses[hoveredCountry]?.Total_Expenses || 0).toFixed(2) : 
+                                    fieldOfSpending === "Clothings" ? (countryExpenses[hoveredCountry]?.Clothing || 0).toFixed(2) :
+                                    fieldOfSpending === "Groceries" ? (countryExpenses[hoveredCountry]?.Markets || 0).toFixed(2) :
+                                    fieldOfSpending === "Transport" ? (countryExpenses[hoveredCountry]?.Public_Transportation || 0).toFixed(2) :
+                                    fieldOfSpending === "Rent" ? (countryExpenses[hoveredCountry]?.Rent || 0).toFixed(2) :
+                                    fieldOfSpending === "Dine-out" ? (countryExpenses[hoveredCountry]?.Restaurants || 0).toFixed(2) :
+                                    fieldOfSpending === "Leisure" ? (countryExpenses[hoveredCountry]?.Sports || 0).toFixed(2) :
+                                    fieldOfSpending === "Utilities" ? (countryExpenses[hoveredCountry]?.Utilities || 0).toFixed(2) : 0
+                                }
                             </div>
                         </div>
                     </div>
