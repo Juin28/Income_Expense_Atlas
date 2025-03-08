@@ -36,7 +36,7 @@ const BudgetVisualiserPage = () => {
     'Utilities': 400
   };
 
-  // Initial categories with default values (will be updated from country data)
+  // Initial categories with default values
   const [categories, setCategories] = useState({
     'Rent': { value: 399.66, max: 1200, average: 399.66 },
     'Groceries': { value: 73.36, max: 400, average: 73.36 },
@@ -47,22 +47,11 @@ const BudgetVisualiserPage = () => {
     'Utilities': { value: 145.66, max: 400, average: 145.66 },
   });
 
-  // Dynamic conversion rates from imported data
   const conversionRates = {};
   for(const [no, currency] of Object.entries(currencyData)){
     conversionRates[currency.code] = currency.exchange_rate;
   }
   
-  // If conversionRates is empty, provide fallback values for demo
-  if (Object.keys(conversionRates).length === 0) {
-    Object.assign(conversionRates, {
-      'USD': 1,
-      'EUR': 0.85,
-      'GBP': 0.75,
-      'JPY': 110.15,
-      'CNY': 6.45
-    });
-  }
 
   // Get all country names from the imported data
   const getCountriesFromData = () => {
@@ -80,7 +69,7 @@ const BudgetVisualiserPage = () => {
     for (const countryCode in countriesData) {
       if (countriesData[countryCode].country_name === countryName) {
         var selectedCountryData = countriesData[countryCode].country;
-        console.log(selectedCountryData)
+        //console.log(selectedCountryData)
         return selectedCountryData;
       }
     }
@@ -207,8 +196,7 @@ const BudgetVisualiserPage = () => {
 
   // Update savings and budget warning when total budget changes
   useEffect(() => {
-    if (isCountryChanging) return; // Skip this update during country change
-    // set to average values if the budget is above the average expense
+    if (isCountryChanging) return; 
     var updatedCategories={ ...categories };
     const countryData = getCountryDataByName(selectedCountry);
     if(totalBudget > avgBudget) {
@@ -329,20 +317,21 @@ const BudgetVisualiserPage = () => {
   // Currency conversion handler
   const handleCurrencyChange = (event) => {
     const newCurrency = event.target.value;
+    
+    // Direct conversion from current currency to new currency
     const conversionFactor = conversionRates[newCurrency] / conversionRates[currency];
     
     setCurrency(newCurrency);
     
-    // Convert all budget values
-    const countryData = getCountryDataByName(selectedCountry);
-    const baseAvgBudget = countryData ? parseFloat(countryData["Total_Expenses"]) : avgBudget;
-    const newAvgBudget = Math.ceil(parseFloat(baseAvgBudget * conversionRates[newCurrency]) * 100) / 100;
+    // Convert the average budget
+    const newAvgBudget = Math.ceil(avgBudget * conversionFactor * 100) / 100;
     setAvgBudget(newAvgBudget);
-
-    const newTotalBudget = Math.ceil(parseFloat(totalBudget * conversionFactor) * 100) / 100;
+  
+    // Convert the total budget maintaining the same value in real terms
+    const newTotalBudget = Math.ceil(totalBudget * conversionFactor * 100) / 100;
     setTotalBudget(newTotalBudget);
     
-    // Convert all category values
+    // Convert all category values directly using the same conversion factor
     const convertedCategories = {};
     Object.entries(categories).forEach(([category, data]) => {
       convertedCategories[category] = {
@@ -354,7 +343,6 @@ const BudgetVisualiserPage = () => {
     
     setCategories(convertedCategories);
   };
-
   const handleTotalBudgetChange = (event) => {
     // Remove any non-numeric characters
   const numericValue = event.target.value.replace(/[^\d]/g, '');
