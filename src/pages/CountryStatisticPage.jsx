@@ -16,7 +16,7 @@ import {useNavigate, useLocation} from "react-router-dom";
 import data from "../data/data_latest.json";
 import currencies from "../data/currencies_data.json";
 
-const COLORS = ["#8B2F8A", "#A2539B", "#B977AC", "#CA498C", "#CF9BBD", "#E6BFCE", "#FDE3DF"];
+const COLORS = ["#8B2F8A", "#A2539B", "#B977AC", "#CA498C", "#CF9BBD", "#E6BFCE", "#FDE3DF", "#87A45D"];
 const CATEGORY_MAP = {
     "Markets": "Groceries",
     "Clothing_And_Shoes": "Clothings",
@@ -37,6 +37,28 @@ const COLOR_MAP = {
     "Utilities": "#FDE3DF",
     "Net_Salary": "#87A45D"
 }
+
+const CustomTooltip = (props) => {
+    const { active, payload } = props;
+    if (!active || !payload?.length) return null;
+
+    const data = Object.fromEntries(payload.map(({ name, value }) => [name, value]));
+    const salary = data["Monthly salary"] || 1; // Avoid division by zero
+
+    return (
+        <div style={{ backgroundColor: "#222", padding: "10px", borderRadius: "5px", color: "white" }}>
+            <p><strong>{payload[0]?.payload.city}</strong></p>
+            <p>Salary: ${salary.toFixed(2)}</p>
+            {Object.entries(data)
+                .filter(([key]) => key !== "Monthly salary")
+                .map(([key, value]) => (
+                    <p key={key} style={{ color: payload.find(entry => entry.name === key)?.color }}>
+                        {key}: ${value.toFixed(2)} ({((value / salary) * 100).toFixed(1)}%)
+                    </p>
+                ))}
+        </div>
+    );
+};
 
 
 export default function CountryStatisticPage() {
@@ -111,16 +133,6 @@ export default function CountryStatisticPage() {
     const wholeData = processedData[selectedCountry] || { country: {}, cities: {} };
     const latestData = wholeData.country || {};
 
-    const countryData = expenseCategories.map((category, index) => ({
-        name: CATEGORY_MAP[category] || category, // Use mapped name
-        value: latestData[category] || 0,
-        color: COLOR_MAP[category]
-    })).filter(item => item.value > 0);
-
-    if (countryData.length === 0) {
-        return null; // Skip rendering this country if no valid data
-    }
-
     /**
      * Dealing with missing values for cities
      * For those cities with no less than 3 categories than its country, append the missing values of these categories with the country values.
@@ -161,9 +173,6 @@ export default function CountryStatisticPage() {
         })
     ];
 
-
-
-
     const updatedBarData = barData.map((entry) => {
         return {
             ...entry,
@@ -180,6 +189,7 @@ export default function CountryStatisticPage() {
             }, {}),
         };
     });
+
 
     return (
         <div className="flex min-h-screen bg-black text-white">
@@ -304,7 +314,8 @@ export default function CountryStatisticPage() {
                                     <XAxis dataKey="city" angle={-75} textAnchor="end" xAxisId={0} />
                                     <XAxis dataKey="city" angle={-75} textAnchor="end" xAxisId={1} hide/>
                                     <YAxis />
-                                    <Tooltip contentStyle={{ backgroundColor: "#222" }} />
+                                    <Tooltip contentStyle={{ backgroundColor: "#222" }}
+                                             content={<CustomTooltip />}/>
                                     <Legend layout="horizontal" verticalAlign="top" align="center" />
 
                                     {/* Reference line for the selected category */}
@@ -333,7 +344,6 @@ export default function CountryStatisticPage() {
                                             }}
                                         />
                                     )}
-
 
                                     <Bar
                                         dataKey="Monthly salary"
@@ -369,8 +379,6 @@ export default function CountryStatisticPage() {
                                     ))}
                                 </BarChart>
                             </ResponsiveContainer>
-
-
                         </>
                     </div>
                 </div>
