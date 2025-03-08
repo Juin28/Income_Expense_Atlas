@@ -12,6 +12,7 @@ const BudgetVisualiserPage = () => {
   const [isBudgetWarning, setIsBudgetWarning] = useState(false);
   const [savings, setSavings] = useState(0);
   const [isCountryChanging, setIsCountryChanging] = useState(false);
+  const [avgBudget, setAvgBudget] = useState(1600)
 
   // Map API data keys to display names
   const categoryMapping = {
@@ -78,7 +79,9 @@ const BudgetVisualiserPage = () => {
   const getCountryDataByName = (countryName) => {
     for (const countryCode in countriesData) {
       if (countriesData[countryCode].country_name === countryName) {
-        return countriesData[countryCode].country;
+        var selectedCountryData = countriesData[countryCode].country;
+        console.log(selectedCountryData)
+        return selectedCountryData;
       }
     }
     return null;
@@ -90,7 +93,8 @@ const BudgetVisualiserPage = () => {
     const initialCountryData = getCountryDataByName(selectedCountry);
     if (initialCountryData) {
       const newCategories = updateCategoriesFromCountryData(initialCountryData);
-      const newBudget = Math.round(initialCountryData['Total_Expenses'] || 1600);
+      const newBudget = parseFloat((initialCountryData['Total_Expenses'] || 1600).toFixed(2));
+      setAvgBudget(parseFloat((initialCountryData['Total_Expenses'] || 1600).toFixed(2)))
       setTotalBudget(newBudget);
       
       // Calculate initial savings after categories are updated
@@ -108,17 +112,37 @@ const BudgetVisualiserPage = () => {
     const countryData = getCountryDataByName(selectedCountry);
     if (countryData) {
       const newCategories = updateCategoriesFromCountryData(countryData);
-      const newBudget = Math.round(countryData['Total_Expenses'] || 1600);
-      setTotalBudget(newBudget);
+      const newBudget = parseFloat(countryData['Total_Expenses'] || 1600).toFixed(2);
+      
+      // Convert new budget to the selected currency
+      const conversionFactor = conversionRates[currency] / conversionRates['USD']; 
+      const convertedBudget = Math.ceil(parseFloat(newBudget * conversionFactor) * 100) / 100;
+      
+      // Set the updated values
+      setAvgBudget(convertedBudget);
+      setTotalBudget(convertedBudget);
+      
+      // Convert all category values based on the current currency
+      const convertedCategories = {};
+      Object.entries(newCategories).forEach(([category, data]) => {
+        convertedCategories[category] = {
+          value: Math.round(data.value * conversionFactor * 100) / 100,
+          max: Math.round(data.max * conversionFactor),
+          average: Math.round(data.average * conversionFactor * 100) / 100
+        };
+      });
+      
+      // Update the categories state
+      setCategories(convertedCategories);
       
       // Calculate new savings after categories are updated
       setTimeout(() => {
-        const totalExpenses = calculateTotalExpensesFromCategories(newCategories);
-        setSavings(Math.max(0, newBudget - totalExpenses));
+        const totalExpenses = calculateTotalExpensesFromCategories(convertedCategories);
+        setSavings(Math.max(0, convertedBudget - totalExpenses));
         setIsCountryChanging(false);
       }, 0);
     }
-  }, [selectedCountry]);
+  }, [selectedCountry]); 
 
   // Helper function to calculate expenses from a categories object
   const calculateTotalExpensesFromCategories = (categoriesObj) => {
@@ -137,18 +161,22 @@ const BudgetVisualiserPage = () => {
       
       newCategories[displayName] = {
         value: value,
-        max: categoryMaxValues[displayName] || value * 2, // Fallback max value
+        max: Math.max(categoryMaxValues[displayName], value * 4)>1000? 
+        Math.round(Math.max(categoryMaxValues[displayName], value * 4)/1000)*1000
+        :
+        Math.round(Math.max(categoryMaxValues[displayName], value * 4)/100)*100 ,
         average: value  // Store average as the original country value
       };
     }
-    
+    setAvgBudget(parseFloat(countryData["Total_Expenses"]).toFixed(2))
     setCategories(newCategories);
     return newCategories; // Return the new categories for immediate use
   };
 
+
   // Calculate total expenses across all categories
   const calculateTotalExpenses = () => {
-    return Object.values(categories).reduce((sum, cat) => sum + cat.value, 0);
+    return parseFloat(Object.values(categories).reduce((sum, cat) => sum + cat.value, 0)).toFixed(2);
   };
 
   // Calculate total average expenses (recommended budget)
@@ -177,32 +205,51 @@ const BudgetVisualiserPage = () => {
     return categories[category].value + room;
   };
 
-  // Update savings and budget warning when categories or total budget changes
+  // Update savings and budget warning when total budget changes
   useEffect(() => {
     if (isCountryChanging) return; // Skip this update during country change
-    
-    const totalExpenses = calculateTotalExpenses();
-    const newSavings = Math.max(0, totalBudget - totalExpenses);
-    
-    setSavings(newSavings);
-    setIsBudgetWarning(totalExpenses > totalBudget);
-    
-    // Proportionally adjust categories when budget is below expenses
-    if (totalExpenses > totalBudget && totalExpenses > 0) {
-      const proportion = totalBudget / totalExpenses;
+    // set to average values if the budget is above the average expense
+    var updatedCategories={ ...categories };
+    const countryData = getCountryDataByName(selectedCountry);
+    if(totalBudget > avgBudget) {
+      console.log("Input budget larger than average, setting categories to average values")
       
-      const adjustedCategories = {};
-      Object.entries(categories).forEach(([category, data]) => {
-        adjustedCategories[category] = {
+       updatedCategories = updateCategoriesFromCountryData(countryData);
+      setCategories(updatedCategories);
+    };
+
+    // Proportionally adjust categories when budget is below expenses
+    if (avgBudget > totalBudget ) {
+      console.log("input budget smaller than average, setting categories to proportion")
+      const proportion = totalBudget / avgBudget;
+      
+      Object.entries(updateCategoriesFromCountryData(countryData)).forEach(([category, data]) => {
+        updatedCategories[category] = {
           ...data,
           value: Math.round(data.value * proportion * 100) / 100
         };
       });
       
-      setCategories(adjustedCategories);
+      setCategories(updatedCategories);
     }
-  }, [totalBudget, categories, isCountryChanging]);
+    console.log("Categories:" ,updatedCategories)
+    const totalExpenses = parseFloat(Object.values(updatedCategories).reduce((sum, cat) => sum + cat.value, 0)).toFixed(2);
+    // const totalRecommendedExpense = calculateRecommendedBudget();
+    console.log("Total Expense:" ,totalExpenses);
+    console.log("Average budget: ", avgBudget);
+    console.log("Total budget: ", totalBudget)
+    const newSavings = Math.max(0, totalBudget - totalExpenses)<1? 0: totalBudget - totalExpenses;
+    
+    setSavings(newSavings);
+    if (avgBudget > totalBudget) {
+      setIsBudgetWarning(Math.abs(avgBudget - totalBudget) > 1);
+  } else {
+      setIsBudgetWarning(false); // Don't set the warning if budget is larger than expenses
+  }
+    
+  }, [totalBudget, isCountryChanging, avgBudget]);
 
+  
   // Handle category value changes
   const handleCategoryChange = (category, newValue) => {
     const parsedNewValue = parseFloat(newValue);
@@ -287,7 +334,13 @@ const BudgetVisualiserPage = () => {
     setCurrency(newCurrency);
     
     // Convert all budget values
-    setTotalBudget(Math.round(totalBudget * conversionFactor));
+    const countryData = getCountryDataByName(selectedCountry);
+    const baseAvgBudget = countryData ? parseFloat(countryData["Total_Expenses"]) : avgBudget;
+    const newAvgBudget = Math.ceil(parseFloat(baseAvgBudget * conversionRates[newCurrency]) * 100) / 100;
+    setAvgBudget(newAvgBudget);
+
+    const newTotalBudget = Math.ceil(parseFloat(totalBudget * conversionFactor) * 100) / 100;
+    setTotalBudget(newTotalBudget);
     
     // Convert all category values
     const convertedCategories = {};
@@ -304,9 +357,16 @@ const BudgetVisualiserPage = () => {
 
   const handleTotalBudgetChange = (event) => {
     // Remove any non-numeric characters
-    const numericValue = event.target.value.replace(/[^\d]/g, '');
-    setTotalBudget(numericValue === '' ? 0 : parseInt(numericValue));
+  const numericValue = event.target.value.replace(/[^\d]/g, '');
+  const newBudget = numericValue === '' ? 0 : parseInt(numericValue);
+
+  // Convert the new budget to the current currency
+  const conversionFactor = conversionRates[currency] / conversionRates['USD'];
+  const convertedBudget = Math.ceil(parseFloat(newBudget * conversionFactor) * 100) / 100;
+  
+  setTotalBudget(convertedBudget);
   };
+
 
   // Color mapping for Sankey diagram
   const getCategoryColor = (category) => {
@@ -330,6 +390,11 @@ const BudgetVisualiserPage = () => {
   const filteredCountries = countries.filter(country =>
     country.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  //Place the selected country on the top if there is one
+  const orderedCountries = selectedCountry
+  ? [selectedCountry, ...filteredCountries.filter(country => country !== selectedCountry)]
+  : filteredCountries;
 
   // Sankey Diagram Component
   const SankeyDiagram = () => {
@@ -494,12 +559,20 @@ const BudgetVisualiserPage = () => {
               <div>
                 <p className="font-bold">Budget Too Low!</p>
                 <p className="text-sm">
-                  Your total budget ({totalBudget} {currency}) is less than the recommended expenses ({calculateRecommendedBudget().toFixed(2)} {currency}) for {selectedCountry}. 
+                  Your total budget ({totalBudget} {currency}) is less than the recommended expenses ({parseFloat(avgBudget)} {currency}) for {selectedCountry}. 
                   Your spending has been proportionally adjusted to fit within your budget.
                 </p>
               </div>
             </div>
           )}
+
+          {/*Country Selected*/}
+          <div className='mb-4 '>
+            <p className='text-sm font-medium text-gray-300 mb-1'>Selected Country</p>
+            <p className='text-3xl font-bold text-white mb-2'>{selectedCountry}</p>
+          </div>
+
+          
 
           <div className="mb-4">
             <p className="text-sm font-medium text-gray-300 mb-1">Select Currency</p>
@@ -526,10 +599,11 @@ const BudgetVisualiserPage = () => {
                 className="bg-gray-800 border border-gray-700 p-2 w-32 text-white text-xl rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
               />
               <div className="ml-4 text-xl text-white">{currency}</div>
+              
             </div>
             {isBudgetWarning && (
               <p className="text-red-400 text-sm mt-1">
-                Recommended budget for {selectedCountry}: {calculateRecommendedBudget().toFixed(2)} {currency}
+                Recommended budget for {selectedCountry}: {avgBudget} {currency}
               </p>
             )}
             
@@ -567,13 +641,13 @@ const BudgetVisualiserPage = () => {
               />
             </div>
             <div className="space-y-1 max-h-96 overflow-y-auto">
-              {filteredCountries.map((country) => (
+              {orderedCountries.map((country) => (
                 <div
                   key={country}
                   className={`flex justify-between items-center p-2 rounded cursor-pointer transition-colors duration-150 ${
                     selectedCountry === country 
-                      ? 'bg-blue-600 text-white' 
-                      : 'hover:bg-gray-700'
+                      ? 'bg-blue-600 text-white' //selected country style
+                      : 'hover:bg-gray-700' //hover style
                   }`}
                   onClick={() => setSelectedCountry(country)}
                 >
