@@ -7,7 +7,7 @@ const BudgetVisualiserPage = () => {
   // Initial state setup
   const [totalBudget, setTotalBudget] = useState(1600);
   const [currency, setCurrency] = useState('USD');
-  const [selectedCountry, setSelectedCountry] = useState('Japan');
+  const [selectedCountry, setSelectedCountry] = useState('United States');
   const [searchTerm, setSearchTerm] = useState('');
   const [isBudgetWarning, setIsBudgetWarning] = useState(false);
   const [savings, setSavings] = useState(0);
@@ -80,7 +80,7 @@ const BudgetVisualiserPage = () => {
     for (const countryCode in countriesData) {
       if (countriesData[countryCode].country_name === countryName) {
         var selectedCountryData = countriesData[countryCode].country;
-        console.log(selectedCountryData)
+        // console.log(selectedCountryData)
         return selectedCountryData;
       }
     }
@@ -212,7 +212,7 @@ const BudgetVisualiserPage = () => {
     var updatedCategories={ ...categories };
     const countryData = getCountryDataByName(selectedCountry);
     if(totalBudget > avgBudget) {
-      console.log("Input budget larger than average, setting categories to average values")
+      // console.log("Input budget larger than average, setting categories to average values")
       
        updatedCategories = updateCategoriesFromCountryData(countryData);
       setCategories(updatedCategories);
@@ -220,7 +220,7 @@ const BudgetVisualiserPage = () => {
 
     // Proportionally adjust categories when budget is below expenses
     if (avgBudget > totalBudget ) {
-      console.log("input budget smaller than average, setting categories to proportion")
+      // console.log("input budget smaller than average, setting categories to proportion")
       const proportion = totalBudget / avgBudget;
       
       Object.entries(updateCategoriesFromCountryData(countryData)).forEach(([category, data]) => {
@@ -232,12 +232,12 @@ const BudgetVisualiserPage = () => {
       
       setCategories(updatedCategories);
     }
-    console.log("Categories:" ,updatedCategories)
+    // console.log("Categories:" ,updatedCategories)
     const totalExpenses = parseFloat(Object.values(updatedCategories).reduce((sum, cat) => sum + cat.value, 0)).toFixed(2);
     // const totalRecommendedExpense = calculateRecommendedBudget();
-    console.log("Total Expense:" ,totalExpenses);
-    console.log("Average budget: ", avgBudget);
-    console.log("Total budget: ", totalBudget)
+    // console.log("Total Expense:" ,totalExpenses);
+    // console.log("Average budget: ", avgBudget);
+    // console.log("Total budget: ", totalBudget)
     const newSavings = Math.max(0, totalBudget - totalExpenses)<1? 0: totalBudget - totalExpenses;
     
     setSavings(newSavings);

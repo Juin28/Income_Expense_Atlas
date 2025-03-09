@@ -17,6 +17,7 @@ import {
     Legend, 
     Tooltip as RechartsTooltip
 } from 'recharts';
+import { Link } from 'react-router-dom';
 
 export default function CountryComparePage() {
     const [selectedCountries, setSelectedCountries] = useState([]);
