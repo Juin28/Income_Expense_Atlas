@@ -316,7 +316,9 @@ export default function CountryStatisticPage() {
                                     <YAxis />
                                     <Tooltip contentStyle={{ backgroundColor: "#222" }}
                                              content={<CustomTooltip />}
-                                             cursor={false}/>
+                                             cursor={false} // Reference: https://github.com/recharts/recharts/issues/863
+                                                                        // https://recharts.org/en-US/api/Tooltip
+                                    />
                                     <Legend layout="horizontal" verticalAlign="top" align="center" />
 
                                     {/* Reference line for the selected category */}
@@ -353,7 +355,7 @@ export default function CountryStatisticPage() {
                                         barSize={30}
                                         radius={[10, 10, 10, 10]} // Rounded edges
                                         stackId="a" // Use the same stackId to stack this bar with expense
-                                        xAxisId={1}
+                                        xAxisId={0} // Reference: https://github.com/recharts/recharts/issues/570
                                     >
                                     </Bar>
 
@@ -367,7 +369,7 @@ export default function CountryStatisticPage() {
                                             fill={COLOR_MAP[category]}
                                             barSize={20}
                                             stackId="b" // Make sure expense bars are stacked with income bar
-                                            xAxisId={1}
+                                            xAxisId={1} // Reference: https://github.com/recharts/recharts/issues/570
                                         >
                                         </Bar>
                                     ))}
