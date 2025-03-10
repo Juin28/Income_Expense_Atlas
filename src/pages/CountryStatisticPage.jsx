@@ -354,7 +354,6 @@ export default function CountryStatisticPage() {
                                         stackId="a" // Use the same stackId to stack this bar with expense
                                         xAxisId={1}
                                     >
-                                        <LabelList position="top" fill="#fff" fontSize={10} />
                                     </Bar>
 
                                     {(selectedCategory === "All"
@@ -369,12 +368,6 @@ export default function CountryStatisticPage() {
                                             stackId="b" // Make sure expense bars are stacked with income bar
                                             xAxisId={1}
                                         >
-                                            <LabelList
-                                                dataKey={CATEGORY_MAP[category] || category}
-                                                position="center"
-                                                fill="#fff"
-                                                fontSize={10}
-                                            />
                                         </Bar>
                                     ))}
                                 </BarChart>
