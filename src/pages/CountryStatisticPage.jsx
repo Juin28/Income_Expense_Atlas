@@ -315,7 +315,8 @@ export default function CountryStatisticPage() {
                                     <XAxis dataKey="city" angle={-75} textAnchor="end" xAxisId={1} hide/>
                                     <YAxis />
                                     <Tooltip contentStyle={{ backgroundColor: "#222" }}
-                                             content={<CustomTooltip />}/>
+                                             content={<CustomTooltip />}
+                                             cursor={false}/>
                                     <Legend layout="horizontal" verticalAlign="top" align="center" />
 
                                     {/* Reference line for the selected category */}
