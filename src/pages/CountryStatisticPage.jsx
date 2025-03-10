@@ -307,12 +307,11 @@ export default function CountryStatisticPage() {
                             <ResponsiveContainer width="100%" height={500}>
                                 <BarChart
                                     data={updatedBarData}
-                                    barGap = {-25}
+                                    barGap = {-25} // https://github.com/recharts/recharts/issues/570#issuecomment-723501993
                                     margin={{ top: 20, right: 40, left: 60, bottom: 80 }}
                                 >
                                     <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis dataKey="city" angle={-75} textAnchor="end" xAxisId={0} />
-                                    <XAxis dataKey="city" angle={-75} textAnchor="end" xAxisId={1} hide/>
                                     <YAxis />
                                     <Tooltip contentStyle={{ backgroundColor: "#222" }}
                                              content={<CustomTooltip />}
@@ -355,7 +354,6 @@ export default function CountryStatisticPage() {
                                         barSize={30}
                                         radius={[10, 10, 10, 10]} // Rounded edges
                                         stackId="a" // Use the same stackId to stack this bar with expense
-                                        xAxisId={0} // Reference: https://github.com/recharts/recharts/issues/570
                                     >
                                     </Bar>
 
@@ -369,7 +367,6 @@ export default function CountryStatisticPage() {
                                             fill={COLOR_MAP[category]}
                                             barSize={20}
                                             stackId="b" // Make sure expense bars are stacked with income bar
-                                            xAxisId={1} // Reference: https://github.com/recharts/recharts/issues/570
                                         >
                                         </Bar>
                                     ))}
