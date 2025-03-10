@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import allData from '../../data/data_latest.json';
+import { active } from 'd3';
 
 export default function Sidebar(props) {
     const [searchTerm, setSearchTerm] = useState('');
@@ -21,6 +22,11 @@ export default function Sidebar(props) {
                     code: countryCode 
                 });
             } else if (activeTab === "spend" && country.country.Total_Expenses) {
+                acc.push({ 
+                    name: country.country_name, 
+                    code: countryCode 
+                });
+            } else if (activeTab==="saving" && country.country.Net_Salary-country.country.Total_Expenses){
                 acc.push({ 
                     name: country.country_name, 
                     code: countryCode 

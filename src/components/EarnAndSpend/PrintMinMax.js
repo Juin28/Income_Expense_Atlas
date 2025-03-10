@@ -17,10 +17,13 @@ export default function printMinAndMaxValues(data) {
     let utilitiesMax = -Infinity;
     let sportsMin = Infinity;
     let sportsMax = -Infinity;
+    let savingMax = -Infinity;
+    let savingMin = Infinity;
 
     for (const countryCode in data) {
         const salaryValue = data[countryCode].country.Net_Salary;
         const expenseValue = data[countryCode].country.Total_Expenses;
+        const savingValue = salaryValue - expenseValue;
         const marketsValue = data[countryCode].country.Markets;
         const clothingValue = data[countryCode].country.Clothing_And_Shoes;
         const rentValue = data[countryCode].country.Rent_Per_Month;
@@ -34,6 +37,12 @@ export default function printMinAndMaxValues(data) {
         }
         if (salaryValue > salaryMax) {
             salaryMax = salaryValue;
+        }
+        if (savingValue > savingMax) {
+            savingMax = savingValue;
+        }
+        if (savingValue < savingMin) {
+            savingMin = savingValue;
         }
         if (expenseValue < expenseMin) {
             expenseMin = expenseValue;
@@ -87,6 +96,7 @@ export default function printMinAndMaxValues(data) {
 
     console.log(`Salary min: ${salaryMin}, Salary max: ${salaryMax}`);
     console.log(`Expense min: ${expenseMin}, Expense max: ${expenseMax}`);
+    console.log(`Saving min: ${savingMin}, Saving Max: ${savingMax}`);
     console.log(`Markets min: ${marketsMin}, Markets max: ${marketsMax}`);
     console.log(`Clothing min: ${clothingMin}, Clothing max: ${clothingMax}`);
     console.log(`Rent min: ${rentMin}, Rent max: ${rentMax}`);

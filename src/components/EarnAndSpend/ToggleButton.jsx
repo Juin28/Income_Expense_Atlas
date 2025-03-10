@@ -21,6 +21,14 @@ export default function ToggleButton(props) {
             >
                 Spend
             </button>
+            <button
+            className={`px-8 py-2 ${activeTab === "saving"
+            ? "bg-blue-200 text-black"
+            : "bg-transparent text-white"
+            }`}
+            onClick={() => setActiveTab("saving")}>
+            Saving
+            </button>
         </div>
     )
 };
