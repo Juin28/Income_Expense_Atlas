@@ -13,6 +13,7 @@ const EarnAndSpendPage = () => {
     const [worldData, setWorldData] = useState(null);
     const [countrySalaries, setcountrySalaries] = useState({});
     const [countryExpenses, setcountryExpenses] = useState({});
+    const [countrySavings,  setcountrySavings] = useState({});
     const [hoveredCountry, setHoveredCountry] = useState(null);
     const [fieldOfSpending, setFieldOfSpending] = useState("All");
     const [selectedCountry, setSelectedCountry] = useState(null);
@@ -22,10 +23,13 @@ const EarnAndSpendPage = () => {
     const mapRef = useRef();
     const tooltipRef = useRef();
 
-    let salaryMinHex = "#BDF9BD";
+    let salaryMinHex = "#FFFFFF";
     let salaryMaxHex = "#379137";
-    let expenseMinHex = "#FFB6C1";
+    let expenseMinHex = "#FFFFFF";
     let expenseMaxHex = "#BA0000";
+    let savingMinHex = "#B81121";
+    let savingZeroHex = "#FFFFFF";
+    let savingMaxHex = "#0457A4"; 
 
     // Color scales
     const salaryColorScale = scaleLinear()
@@ -64,6 +68,10 @@ const EarnAndSpendPage = () => {
         .domain([0, 450])
         .range([expenseMinHex, expenseMaxHex]);
 
+    const savingColorScale = scaleLinear()
+        .domain([-1410,0,2850])
+        .range([savingMinHex,savingZeroHex,savingMaxHex]);
+
     // Fetch world map data
     useEffect(() => {
         const fetchWorldData = async () => {
@@ -71,6 +79,7 @@ const EarnAndSpendPage = () => {
             const worldData = await worldResponse.json();
             const salaryValues = {};
             const expenseValues = {};
+            const savingValues = {};
 
             for (const countryCode in allData) {
                 if (activeTab === "earn") {
@@ -87,6 +96,19 @@ const EarnAndSpendPage = () => {
                         Sports: allData[countryCode].country.Sports_And_Leisure,
                     };
                 }
+                else if(activeTab==="saving"){
+                    const netSalary = allData[countryCode].country.Net_Salary;
+                    const totalExpenses = allData[countryCode].country.Total_Expenses;
+ 
+                    // Check if either value is null
+                    if (netSalary === null || totalExpenses === null) {
+                        savingValues[countryCode] = NaN; // Set savings to NaN if either is null
+                    } else {
+                        savingValues[countryCode] = netSalary - totalExpenses; // Calculate savings
+                    }
+                    
+                    // console.log(savingValues);
+                }
             }
 
             setWorldData(worldData);
@@ -94,6 +116,8 @@ const EarnAndSpendPage = () => {
                 setcountrySalaries(salaryValues);
             } else if (activeTab === "spend") {
                 setcountryExpenses(expenseValues);
+            } else if (activeTab === "saving"){
+                setcountrySavings(savingValues);
             }
         };
 
@@ -128,6 +152,7 @@ const EarnAndSpendPage = () => {
             if (!worldData
                 || (activeTab === "earn" && Object.keys(countrySalaries).length === 0)
                 || (activeTab === "spend" && Object.keys(countryExpenses).length === 0)
+                || (activeTab === "saving" && Object.keys(countrySavings).length === 0)
             ) return;
 
             const svg = select(mapRef.current);
@@ -178,6 +203,9 @@ const EarnAndSpendPage = () => {
                             const expenseValue = countryExpenses[countryId]?.Utilities || 0;
                             return expenseValue > 0 ? utilityExpenseColorScale(expenseValue) : "#808080";
                         }
+                    } else if (activeTab==="saving"){
+                        const savingValue = countrySavings[countryId] || NaN;
+                        return !isNaN(savingValue) ? savingColorScale(savingValue) : "#808080";
                     }
                 })
                 .attr("stroke", "#333")
@@ -216,6 +244,9 @@ const EarnAndSpendPage = () => {
                             setHoveredCountry(countryId);
                             updateTooltipPosition(countryId);
                         }
+                    }else if (activeTab==="saving" && !isNaN(countrySavings[countryId])){
+                        setHoveredCountry(countryId);
+                        updateTooltipPosition(countryId);
                     }
                 })
                 .on("mouseleave", () => {
@@ -247,6 +278,8 @@ const EarnAndSpendPage = () => {
                         } else {
                             setSelectedCountry(null);
                         }
+                    }else if (activeTab==="saving" && !isNaN(countrySavings[countryId])){
+                        setSelectedCountry(countryId);
                     }
                 });
 
@@ -263,7 +296,7 @@ const EarnAndSpendPage = () => {
                     return (hoveredCountry === countryId) ? 2 : 0.5;
                 });
 
-        }, [worldData, countrySalaries, countryExpenses, hoveredCountry]);
+        }, [worldData, countrySalaries, countryExpenses, countrySavings, hoveredCountry]);
 
         return (
             <>
@@ -283,6 +316,7 @@ const EarnAndSpendPage = () => {
                             </div>
                             <div className="text-sm">
                                 ${activeTab === "earn" ? (countrySalaries[hoveredCountry] || 0).toFixed(2) : 
+                                    activeTab==="saving"? (countrySavings[hoveredCountry]|| 0).toFixed(2):
                                     fieldOfSpending === "All" ? (countryExpenses[hoveredCountry]?.Total_Expenses || 0).toFixed(2) : 
                                     fieldOfSpending === "Clothings" ? (countryExpenses[hoveredCountry]?.Clothing || 0).toFixed(2) :
                                     fieldOfSpending === "Groceries" ? (countryExpenses[hoveredCountry]?.Markets || 0).toFixed(2) :
@@ -322,6 +356,9 @@ const EarnAndSpendPage = () => {
                     expenseMinHex={expenseMinHex}
                     expenseMaxHex={expenseMaxHex}
                     fieldOfSpending={fieldOfSpending}
+                    savingMinHex={savingMinHex}
+                    savingMaxHex={savingMaxHex}
+                    savingZeroHex={savingZeroHex}
                 />
             </div>
             <div>
