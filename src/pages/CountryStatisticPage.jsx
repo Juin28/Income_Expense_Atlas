@@ -16,7 +16,6 @@ import {useNavigate, useLocation} from "react-router-dom";
 import data from "../data/data_latest.json";
 import currencies from "../data/currencies_data.json";
 
-const COLORS = ["#8B2F8A", "#A2539B", "#B977AC", "#CA498C", "#CF9BBD", "#E6BFCE", "#FDE3DF", "#87A45D"];
 const CATEGORY_MAP = {
     "Markets": "Groceries",
     "Clothing_And_Shoes": "Clothings",
@@ -28,37 +27,15 @@ const CATEGORY_MAP = {
     "Net_Salary": "Monthly salary"
 };
 const COLOR_MAP = {
-    "Markets": "#CA498C",
-    "Clothing_And_Shoes": "#8B2F8A",
-    "Rent_Per_Month": "#A2539B",
-    "Restaurants": "#B977AC",
-    "Sports_And_Leisure": "#CF9BBD",
-    "Public_Transportation": "#E6BFCE",
-    "Utilities": "#FDE3DF",
-    "Net_Salary": "#87A45D"
+    "Markets": "#fd7f6f",
+    "Clothing_And_Shoes": "#7eb0d5",
+    "Rent_Per_Month": "#b2e061",
+    "Restaurants": "#bd7ebe",
+    "Sports_And_Leisure": "#ffb55a",
+    "Public_Transportation": "#ffee65",
+    "Utilities": "#8bd3c7",
+    "Net_Salary": "#b3bfd1"
 }
-
-const CustomTooltip = (props) => {
-    const { active, payload } = props;
-    if (!active || !payload?.length) return null;
-
-    const data = Object.fromEntries(payload.map(({ name, value }) => [name, value]));
-    const salary = data["Monthly salary"] || 1; // Avoid division by zero
-
-    return (
-        <div style={{ backgroundColor: "#222", padding: "10px", borderRadius: "5px", color: "white" }}>
-            <p><strong>{payload[0]?.payload.city}</strong></p>
-            <p>Salary: ${salary.toFixed(2)}</p>
-            {Object.entries(data)
-                .filter(([key]) => key !== "Monthly salary")
-                .map(([key, value]) => (
-                    <p key={key} style={{ color: payload.find(entry => entry.name === key)?.color }}>
-                        {key}: ${value.toFixed(2)} ({((value / salary) * 100).toFixed(1)}%)
-                    </p>
-                ))}
-        </div>
-    );
-};
 
 
 export default function CountryStatisticPage() {
@@ -174,22 +151,64 @@ export default function CountryStatisticPage() {
     ];
 
     const updatedBarData = barData.map((entry) => {
+        const totalExpense = expenseCategories
+            .filter(category => category !== "Net_Salary") // Exclude Net_Salary
+            .reduce((sum, category) => {
+                return sum + (entry[CATEGORY_MAP[category] || category] ?? 0);
+            }, 0);
+
         return {
             ...entry,
-            // Multiply each numerical category by the exchange rate of the selected currency
+            // Multiply each numerical category by the exchange rate
             ...Object.keys(entry).reduce((acc, key) => {
                 if (typeof entry[key] === "number") {
-                    // Multiply only the numerical values by the exchange rate
-                    acc[key] = Math.round(entry[key] * (currencies.find(currencyOption => currencyOption.code === currency)?.exchange_rate || 1));
+                    acc[key] = Math.round(
+                        entry[key] * (currencies.find(currencyOption => currencyOption.code === currency)?.exchange_rate || 1)
+                    );
                 } else {
-                    // Keep non-numerical values like city names intact
-                    acc[key] = entry[key];
+                    acc[key] = entry[key]; // Keep non-numeric fields unchanged
                 }
                 return acc;
             }, {}),
+            Total_Expense: Math.round(
+                totalExpense * (currencies.find(currencyOption => currencyOption.code === currency)?.exchange_rate || 1)
+            ),
         };
     });
 
+    const CustomTooltip = (props) => {
+        const { active, payload } = props;
+        if (!active || !payload?.length) return null;
+
+        const data = Object.fromEntries(payload.map(({ name, value }) => [name, value]));
+        const salary = data["Monthly salary"] || 1; // Avoid division by zero
+
+        // Calculate Total_Expense (sum of all expenses except salary)
+        const totalExpense = Object.entries(data)
+            .filter(([key]) => key !== "Monthly salary" && key !== "Total_Expense")
+            .reduce((sum, [, value]) => sum + value, 0);
+
+        return (
+            <div style={{ backgroundColor: "#52796F", padding: "10px", borderRadius: "5px", color: "white" }}>
+                <p><strong>{payload[0]?.payload.city}</strong></p>
+                <p style={{ color: "white", fontWeight: "bold" }}>
+                    Salary: ${salary.toFixed(2)}
+                </p>
+                <p style={{ color: "white", fontWeight: "bold" }}>
+                    Total Expense: ${totalExpense.toFixed(2)} ({((totalExpense / salary) * 100).toFixed(1)}%)
+                </p>
+
+                {/* Display individual expense categories */}
+                {Object.entries(data)
+                    .filter(([key]) => key !== "Monthly salary")
+                    .map(([key, value]) => (
+                        <p key={key} style={{ color: payload.find(entry => entry.name === key)?.color }}>
+                            {key}: ${value.toFixed(2)} ({((value / salary) * 100).toFixed(1)}%)
+                        </p>
+                    ))}
+            </div>
+        );
+    };
 
     return (
         <div className="flex min-h-screen bg-black text-white">
@@ -304,16 +323,16 @@ export default function CountryStatisticPage() {
                                 )}
                             </div>
 
-                            <ResponsiveContainer width="100%" height={500}>
+                            <ResponsiveContainer width="100%" height={750}>
                                 <BarChart
                                     data={updatedBarData}
-                                    barGap = {-25} // https://github.com/recharts/recharts/issues/570#issuecomment-723501993
-                                    margin={{ top: 20, right: 40, left: 60, bottom: 80 }}
+                                    barGap = {-22} // https://github.com/recharts/recharts/issues/570#issuecomment-723501993
+                                    margin={{ top: 20, right: 20, left: 60, bottom: 90 }}
                                 >
                                     <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="city" angle={-75} textAnchor="end" xAxisId={0} />
+                                    <XAxis dataKey="city" angle={-75} textAnchor="end" xAxisId={0} tick={{ dy: 10 }}/>
                                     <YAxis />
-                                    <Tooltip contentStyle={{ backgroundColor: "#222" }}
+                                    <Tooltip contentStyle={{ backgroundColor: "#52796F" }}
                                              content={<CustomTooltip />}
                                              cursor={false} // Reference: https://github.com/recharts/recharts/issues/863
                                                                         // https://recharts.org/en-US/api/Tooltip
@@ -349,25 +368,40 @@ export default function CountryStatisticPage() {
 
                                     <Bar
                                         dataKey="Monthly salary"
-                                        fill="#87A45D"
+                                        fill="#d7e1ee"
                                         // fillOpacity={data.city === selectedCountry ? 0.7 : 1}
                                         barSize={30}
                                         radius={[10, 10, 10, 10]} // Rounded edges
                                         stackId="a" // Use the same stackId to stack this bar with expense
                                     >
+                                        <LabelList position="insideTopLeft" angle={-90} fill="white" fontSize={8} offset={1}/>
                                     </Bar>
 
                                     {(selectedCategory === "All"
                                             ? expenseCategories.filter(category => category !== "Net_Salary") // Exclude "Net_Salary"
                                             : [selectedCategory]
-                                    ).map((category) => (
+                                    ).map((category,index) => (
                                         <Bar
                                             key={CATEGORY_MAP[category] || category}
                                             dataKey={CATEGORY_MAP[category] || category}
                                             fill={COLOR_MAP[category]}
                                             barSize={20}
-                                            stackId="b" // Make sure expense bars are stacked with income bar
+                                            stackId="b"
                                         >
+                                            <LabelList
+                                                dataKey={CATEGORY_MAP[category] || category}
+                                                position="center"
+                                                fill="#222"
+                                                fontSize={8}
+                                            />
+
+                                            {index === 0 && selectedCategory === "All" && <LabelList
+                                                dataKey={"Total_Expense"}
+                                                position="bottom"
+                                                fill="white"
+                                                fontSize={8}
+                                            />
+                                            }
                                         </Bar>
                                     ))}
                                 </BarChart>
