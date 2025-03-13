@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import { ChevronDown, ArrowUpDown, Minus } from 'lucide-react';
 import { Tooltip } from "react-tooltip";
 import countriesData from "../data/data_latest.json";
@@ -19,6 +20,8 @@ import {
 } from 'recharts';
 
 export default function CountryComparePage() {
+    const navigate = useNavigate();
+    const [selectedCountry, setSelectedCountry] = useState(null);
     const [selectedCountries, setSelectedCountries] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [baseLocation, setBaseLocation] = useState('United States');
@@ -30,6 +33,13 @@ export default function CountryComparePage() {
     // Improved currency state
     const [selectedCurrency, setSelectedCurrency] = useState('USD');
     const [isCurrencyDropdownOpen, setIsCurrencyDropdownOpen] = useState(false);
+
+    // Navigation effect when selectedCountry changes
+    useEffect(() => {
+        if (!selectedCountry) return;
+
+        navigate(`/DH2321_Project/country-statistics/country?countryCode=${selectedCountry}`);
+    }, [selectedCountry, navigate]);
 
     // Country-level data
     const countryData = {};
@@ -55,7 +65,9 @@ export default function CountryComparePage() {
     for (const [countryCode, countryInfo] of Object.entries(countriesData)) {
         if(countryInfo.country.Net_Salary!=null&&countryInfo.country.Total_Expenses!=null){
             countries.push(countryInfo.country_name);
-            countryData[countryInfo.country_name] = { ...countryInfo.country };
+            countryData[countryInfo.country_name] = { ...countryInfo.country,
+                countryCode: countryCode
+             };
             if (countryInfo.cities) {
                 for (const [cityName, cityInfo] of Object.entries(countryInfo.cities)) {
                     if(cityInfo.Net_Salary!=null&&cityInfo.Total_Expenses!=null){
@@ -68,6 +80,7 @@ export default function CountryComparePage() {
 
     // Get the current data set based on level type
     const getCurrentData = () => {
+        //console.log(countryData);
         return levelType === 'country' ? countryData : cityData;
     };
 
@@ -207,6 +220,7 @@ export default function CountryComparePage() {
         .filter(location => getCurrentData()[location])
         .map(location => ({
             name: location,
+            id: getCurrentData()[location]?.countryCode||0,
             income: getCurrentData()[location]?.Net_Salary || 0,
             spending: getCurrentData()[location]?.Total_Expenses || 0,
             incomeDiff: calculateDifference(location, 'Net_Salary'),
@@ -228,7 +242,8 @@ export default function CountryComparePage() {
         return displayData.map(location => ({
             name: location.name,
             income: convertCurrency(location.income),
-            spending: convertCurrency(location.spending)
+            spending: convertCurrency(location.spending),
+            id: location.id
         }));
     };
 
@@ -260,6 +275,15 @@ export default function CountryComparePage() {
             setBaseLocation('New York');
         }
         setIsLevelDropdownOpen(false);
+    };
+
+    // Handle bar click for navigation
+    const handleBarClick = (data) => {
+        if (data && data.activePayload && data.activePayload[0]) {
+            const clickedCountry = data.activePayload[0].payload.id;
+            console.log(data.activePayload[0]);
+            setSelectedCountry(clickedCountry);
+        }
     };
 
     // Custom tooltip for recharts
@@ -422,6 +446,7 @@ export default function CountryComparePage() {
                                         <BarChart
                                             data={prepareBarChartData()}
                                             margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                                            onClick={handleBarClick}
                                         >
                                             <CartesianGrid strokeDasharray="3 3" stroke="#444" />
                                             <XAxis dataKey="name" stroke="#fff" />
