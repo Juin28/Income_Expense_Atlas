@@ -390,8 +390,6 @@ const BudgetVisualiserPage = () => {
 
     return (
       <svg width="100%" height="600" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
-        <rect x="0" y="50" width="40" height="500" fill="#8884d8" />
-        <text x="45" y="250" dominantBaseline="middle" fill="white">Budget: {totalBudget} {currency}</text>
 
         {Object.entries(categories).map(([category, { value }], index) => {
           const yPos = 75 + index * 60;
@@ -402,7 +400,7 @@ const BudgetVisualiserPage = () => {
               <path
                 d={`M 40 250 C 250 250, 250 ${yPos}, 800 ${yPos}`}
                 stroke={color}
-                strokeWidth={(value / totalBudget) * 120}
+                strokeWidth={(value / totalBudget) * 100}
                 fill="none"
                 opacity="0.7"
               />
@@ -427,6 +425,8 @@ const BudgetVisualiserPage = () => {
             </text>
           </g>
         )}
+        <rect x="0" y="50" width="40" height="500" fill="#8884d8" />
+        <text x="45" y="250" dominantBaseline="middle" fill="white">Budget: {totalBudget} {currency}</text>
       </svg>
     );
   };
