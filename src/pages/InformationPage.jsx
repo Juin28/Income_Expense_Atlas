@@ -14,18 +14,17 @@ export default function InformationPage() {
                     <li>To visualize your living expenses budget for a specific country and make adjustments, navigate to the <strong>Budget Visualizer</strong>.</li>
                 </ul>
 
-                {/* <h2 className="text-2xl font-bold text-center text-gray-200 mb-6">Walkthrough</h2>
+                <h2 className="text-2xl font-bold text-center text-gray-200 mb-6">Walkthrough</h2>
                 <div className="mb-10">
                     <iframe
-                    className="w-full h-64"
-                    src="https://www.youtube.com/embed/CIQgXqRAq_k"
-                    title="YouTube video player"
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowFullScreen
-                /> 
-                    <p>Walkthrough tutorial video</p>
-                </div> */}
+                        className="w-full h-64"
+                        src="https://www.youtube.com/embed/wy248J7kbws"
+                        title="YouTube video player"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                    /> 
+                </div>
 
                 <h2 className="text-2xl font-bold text-center text-gray-200 mb-6">Project Overview</h2>
                 <div className="mb-10 w-[85%] mx-auto">
