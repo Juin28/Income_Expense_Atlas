@@ -202,7 +202,7 @@ export default function InformationPage() {
                     <h3 className="font-semibold text-xl mb-2">Data Sources</h3>
                     <ol className="list-decimal list-inside text-gray-200">
                         <li>
-                            <strong>Numbeo</strong>
+                            <a className="font-bold" href="https://www.numbeo.com/cost-of-living/">Numbeo</a>
                             <ul className="list-disc ml-4  text-sm">
                                 <li className="my-1 ml-4">Clothing and Shoes Expenses</li>
                                 <li className="my-1 ml-4">Groceries Expenses</li>
@@ -215,7 +215,7 @@ export default function InformationPage() {
                             </ul>
                         </li>
                         <li>
-                            <strong>XE</strong>
+                            <a className="font-bold" href="https://www.xe.com">XE</a>
                             <ul className="list-disc ml-4  text-sm">
                                 <li className="my-1 ml-4">Curreny Exchange Rates</li>
                             </ul>
@@ -226,7 +226,7 @@ export default function InformationPage() {
                     <h3 className="font-semibold text-xl mb-2">Acknowledgement</h3>
                     <ol className="list-decimal list-inside text-gray-200">
                         <li>
-                            The Viral 50 project provided valuable design inspiration for world map part of this project.
+                            The <a className="font-bold text-cyan-200" href="https://viral50vis.github.io">Viral 50 project</a> provided valuable design inspiration for world map part of this project.
                         </li>
                     </ol>
                 </div>
