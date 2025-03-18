@@ -384,15 +384,14 @@ const BudgetVisualiserPage = () => {
   ? [selectedCountry, ...filteredCountries.filter(country => country !== selectedCountry)]
   : filteredCountries;
 
-  // Sankey Diagram Component
+  // Sankey Diagram Component with labels on the right side
   const SankeyDiagram = () => {
     const totalCategoryValues = Object.values(categories).reduce((sum, cat) => sum + cat.value, 0);
 
     return (
-      <svg width="100%" height="600" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
-        <rect x="0" y="50" width="40" height="500" fill="#8884d8" />
-        <text x="45" y="250" dominantBaseline="middle" fill="white">Budget: {totalBudget} {currency}</text>
-
+      <svg width="100%" height="600" viewBox="0 0 900 600" preserveAspectRatio="xMidYMid meet">
+        {/* Adjusted viewBox width to accommodate labels on the right */}
+        
         {Object.entries(categories).map(([category, { value }], index) => {
           const yPos = 75 + index * 60;
           const color = getCategoryColor(category);
@@ -400,13 +399,14 @@ const BudgetVisualiserPage = () => {
           return (
             <g key={category}>
               <path
-                d={`M 40 250 C 250 250, 250 ${yPos}, 800 ${yPos}`}
+                d={`M 40 250 C 250 250, 250 ${yPos}, 650 ${yPos}`}
                 stroke={color}
-                strokeWidth={(value / totalBudget) * 120}
+                strokeWidth={(value / totalBudget) * 100}
                 fill="none"
                 opacity="0.7"
               />
-              <text x="810" y={yPos} dominantBaseline="middle" fill="white" textAnchor="end">
+              {/* Text positioned to the right of path end */}
+              <text x="670" y={yPos} dominantBaseline="middle" fill="white" textAnchor="start">
                 {category}: {value.toFixed(2)} {currency}
               </text>
             </g>
@@ -416,17 +416,20 @@ const BudgetVisualiserPage = () => {
         {savings > 0 && (
           <g>
             <path
-              d={`M 40 250 C 250 250, 250 550, 800 550`}
+              d={`M 40 250 C 250 250, 250 550, 650 550`}
               stroke="#ffbb78"
               strokeWidth={(savings / totalBudget) * 120}
               fill="none"
               opacity="0.7"
             />
-            <text x="810" y="550" dominantBaseline="middle" fill="white" textAnchor="end">
+            {/* Savings text to the right */}
+            <text x="670" y="550" dominantBaseline="middle" fill="white" textAnchor="start">
               Savings: {savings.toFixed(2)} {currency}
             </text>
           </g>
         )}
+        <rect x="0" y="50" width="40" height="500" fill="#8884d8" />
+        <text x="45" y="250" dominantBaseline="middle" fill="white">Budget: {totalBudget} {currency}</text>
       </svg>
     );
   };
@@ -559,8 +562,6 @@ const BudgetVisualiserPage = () => {
             <p className='text-sm font-medium text-gray-300 mb-1'>Selected Country</p>
             <p className='text-3xl font-bold text-white mb-2'>{selectedCountry}</p>
           </div>
-
-          
 
           <div className="mb-4">
             <p className="text-sm font-medium text-gray-300 mb-1">Select Currency</p>
