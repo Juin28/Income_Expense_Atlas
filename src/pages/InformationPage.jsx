@@ -230,6 +230,14 @@ export default function InformationPage() {
                         </li>
                     </ol>
                 </div>
+
+                <h2 className="text-2xl font-bold text-center text-gray-200 mb-6">GitHub Repository</h2>
+                <div className="mb-10 w-[85%] mx-auto">
+                    <p className="mb-4">
+                        Click on <a className="font-bold text-cyan-200" href="https://github.com/Juin28/DH2321_Project">the link</a> for the codes and dataset for our project.
+                        The codes can be found at <a className="font-bold text-cyan-200" href="https://github.com/Juin28/DH2321_Project/tree/main/src">/src</a>, while the dataset is stored at <a className="font-bold text-cyan-200" href="https://github.com/Juin28/DH2321_Project/tree/main/src/data">/src/data</a>.
+                    </p>
+                </div>
             </div>
         </div>
     );
