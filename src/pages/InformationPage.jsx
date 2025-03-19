@@ -39,6 +39,88 @@ export default function InformationPage() {
                         Users are expected to possess a foundational understanding of web applications and data interpretation, enabling them to engage meaningfully with the presented information.
                         Additionally, the application features a budget visualizer, which allows users to estimate their potential expenditures across different categories based on their input budget, providing a clearer understanding of anticipated spending in diverse countries.
                     </p>
+                    <p>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </p>
+                    <h3 className="font-semibold text-xl mb-2">User Definition</h3>
+                    <p>
+                        Our target user is defined as somebody who is planning to move to a new country or city, work and also live there.
+                    </p>
+                    <p>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </p>
+                    <h3 className="font-semibold text-xl mb-2">Task Abstraction</h3>
+                    <ol className="list-decimal list-inside text-gray-200">
+                        <li>
+                            Discover - the expat is using our visualisation to learn something new(expenses, income, purchasing power) about the countries and the prospective city he wishes to live in
+                        </li>
+                        <li>
+                            Browse - the expat has a subset of countries and possibly cities within those countries he wishes to live in but does not have a specific target in mind
+                        </li>
+                        <li>
+                            Compare - the expat is comparing the income and purchasing power across a subset of countries he is living in using the country compare tab
+                        </li>
+                        <li>
+                            Distribution - Analyse the distribution of incomes and expenses and purchasing power across countries of specific interest for the businessman.
+                        </li>
+                    </ol>
+                    <p>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </p>
+                    <h3 className="font-semibold text-xl mb-2">Data Abstraction & Provenance</h3>
+                    <p>
+                        Our data mainly comes from <a className="font-bold underline"  href="https://www.numbeo.com/cost-of-living/">Numbeo</a>, with further derivation to adapt to the functionality of our project.
+                    </p>
+                    <ol className="list-decimal list-inside text-gray-200">
+                        <li>
+                            Earning:
+                            <div className="w-[95%] mx-auto">
+                                <p>
+                                    - Net Salary (After Tax)
+                                </p>
+                            </div>
+                        </li>
+                        <li>
+                            Spending:
+                            <div className="w-[95%] mx-auto">
+                                <p>
+                                    - Clothing
+                                </p>
+                                <p>
+                                    - Groceries
+                                </p>
+                                <p>
+                                    - Public Transport
+                                </p>
+                                <p>
+                                    - Rent
+                                </p>
+                                <p>
+                                    - Dine-Out
+                                </p>
+                                <p>
+                                    - Leisure
+                                </p>
+                                <p>
+                                    - Utilities
+                                </p>
+                            </div>
+                        </li>
+                        <li>
+                            Derived:
+                            <div className="w-[95%] mx-auto">
+                                <p>
+                                    - Purchasing Power Score
+                                </p>
+                                <p>
+                                    - Average Monthly Salary
+                                </p>
+                                <p>
+                                    - Average Monthly Spending
+                                </p>
+                            </div>
+                        </li>
+                    </ol>
                 </div>
 
                 <h2 className="text-2xl font-bold text-center text-gray-200 mb-6">Meet Our Team</h2>
@@ -202,7 +284,7 @@ export default function InformationPage() {
                     <h3 className="font-semibold text-xl mb-2">Data Sources</h3>
                     <ol className="list-decimal list-inside text-gray-200">
                         <li>
-                            <a className="font-bold" href="https://www.numbeo.com/cost-of-living/">Numbeo</a>
+                            <a className="font-bold underline" href="https://www.numbeo.com/cost-of-living/">Numbeo</a>
                             <ul className="list-disc ml-4  text-sm">
                                 <li className="my-1 ml-4">Clothing and Shoes Expenses</li>
                                 <li className="my-1 ml-4">Groceries Expenses</li>
@@ -215,7 +297,7 @@ export default function InformationPage() {
                             </ul>
                         </li>
                         <li>
-                            <a className="font-bold" href="https://www.xe.com">XE</a>
+                            <a className="font-bold underline" href="https://www.xe.com">XE</a>
                             <ul className="list-disc ml-4  text-sm">
                                 <li className="my-1 ml-4">Curreny Exchange Rates</li>
                             </ul>
