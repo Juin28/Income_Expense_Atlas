@@ -14,5 +14,5 @@ export default defineConfig({
       '@': resolve(__dirname, 'src'),
     },
   },
-  base: "/DH2321_Project",
+  base: "/Income_Expense_Atlas",
 })

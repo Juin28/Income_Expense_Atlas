@@ -3,7 +3,7 @@
 ## Setup
 1. change directory to this project
 ```
-cd DH2321_Project
+cd Income_Expense_Atlas
 ```
 2. install the dependencies, NOTE: **DO NOT `npm audit fix` even there is `vulnerabilities`** 
 ```

@@ -4,34 +4,34 @@
         "email": "juin@kth.se",
         "role": "Development Lead & User Testing",
         "education": "BEng in Computer Science with an Extended Major in Artificial Intelligence, HKUST",
-        "photo": "/DH2321_Project/juin.png"
+        "photo": "/Income_Expense_Atlas/juin.png"
     },
     {
         "name": "Yuning Wang",
         "email": "yuningwa@kth.se",
         "role": "Frontend Development & User Testing",
         "education": "BEng in Computer Science with Minor in Mathematics, HKUST",
-        "photo": "/DH2321_Project/yolanda.png"
+        "photo": "/Income_Expense_Atlas/yolanda.png"
     },
     {
         "name": "Arjun Kumaresh",
         "email": "kumaresh@kth.se",
         "role": "Frontend Development",
         "education": "BEng in Computer Science, NTU",
-        "photo": "/DH2321_Project/arjun.png"
+        "photo": "/Income_Expense_Atlas/arjun.png"
     },
     {
         "name": "Weng lo Cheang",
         "email": "cheang@kth.se",
         "role": "UI/UX Design",
         "education": "BEng in Computer Science with an Extended Major in Artificial Intelligence, HKUST",
-        "photo": "/DH2321_Project/yoyo.png"
+        "photo": "/Income_Expense_Atlas/yoyo.png"
     },
     {
         "name": "Woojin Kim",
         "email": "woojin@kth.se",
         "role": "Data Handling & Processing",
         "education": "BEng & BBA Dual Degree Program in Technology & Management, HKUST",
-        "photo": "/DH2321_Project/woojin.png"
+        "photo": "/Income_Expense_Atlas/woojin.png"
     }
 ]

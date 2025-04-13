@@ -38,7 +38,7 @@ export default function CountryComparePage() {
     useEffect(() => {
         if (!selectedCountry) return;
 
-        navigate(`/DH2321_Project/country-statistics/country?countryCode=${selectedCountry}`);
+        navigate(`/Income_Expense_Atlas/country-statistics/country?countryCode=${selectedCountry}`);
     }, [selectedCountry, navigate]);
 
     // Country-level data
